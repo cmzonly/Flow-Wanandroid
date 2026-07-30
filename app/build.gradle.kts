@@ -48,4 +48,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    //xpopup用来定义弹窗,shapeview用来定义控件圆角形状之类的,注意,使用background属性,弹窗为方形,使用shape_solide为自定义的圆角
+    implementation(libs.xpopup)
+    implementation(libs.shapeview)
+    //今日头条屏幕适配
+    implementation(libs.androidautosize)
+    //recyclerview适配器
+    implementation(libs.baserecyclerviewadapterhelper4)
+    //常用工具类
+    implementation(libs.utilcodex)
 }

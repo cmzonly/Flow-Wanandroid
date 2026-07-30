@@ -8,6 +8,11 @@ appcompat = "1.6.1"
 material = "1.10.0"
 activityKtx = "1.8.0"
 constraintlayout = "2.1.4"
+shapeview = "11.0"
+utilcodex = "1.31.1"
+xpopup = "2.10.0"
+baserecyclerviewadapterhelper4 = "4.4.1"
+androidautosize = "v1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -18,6 +23,11 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+shapeview = { module = "com.github.getActivity:ShapeView", version.ref = "shapeview" }
+utilcodex = { module = "com.blankj:utilcodex", version.ref = "utilcodex" }
+xpopup = { module = "com.github.li-xiaojun:XPopup", version.ref = "xpopup" }
+androidautosize = { module = "com.github.JessYanCoding:AndroidAutoSize", version.ref = "androidautosize" }
+baserecyclerviewadapterhelper4 = { module = "io.github.cymchad:BaseRecyclerViewAdapterHelper4", version.ref = "baserecyclerviewadapterhelper4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
