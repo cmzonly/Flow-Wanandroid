@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.czwd.flow_wanandroid"
-        minSdk = 29
+        minSdk = 28
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -28,6 +28,14 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -35,6 +43,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
 }
@@ -57,4 +66,13 @@ dependencies {
     implementation(libs.baserecyclerviewadapterhelper4)
     //常用工具类
     implementation(libs.utilcodex)
+    //retrofit配套Gson
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    //拦截器
+    implementation(libs.logging.interceptor)
+    //依赖注入koin
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
 }
