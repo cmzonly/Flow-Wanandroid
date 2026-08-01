@@ -16,12 +16,13 @@ import com.czwd.flow_wanandroid.databinding.ActivityMainBinding
 import com.czwd.flow_wanandroid.module.home.HomeViewModel
 import com.czwd.flow_wanandroid.network.NetworkResult
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
     companion object{
         private const val TAG = "MainActivity"
     }
-    private val homeViewModel by viewModels<HomeViewModel>()
+    private val homeViewModel: HomeViewModel by viewModel()
     override fun initObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){

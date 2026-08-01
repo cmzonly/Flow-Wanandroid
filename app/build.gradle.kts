@@ -74,5 +74,12 @@ dependencies {
     //依赖注入koin
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    /**
+     * App Startup :它让你在 Application.onCreate() 之前就完成初始化工作
+     * 初始化更早、更可靠
+     * 可以控制多个初始化器的执行顺序
+     * 代码更模块化，不用全塞在 Application 里
+     */
+    implementation(libs.androidx.app.startup)
 
 }
