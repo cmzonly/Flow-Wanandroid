@@ -2,6 +2,7 @@ package com.czwd.flow_wanandroid.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blankj.utilcode.util.ToastUtils
 import com.czwd.flow_wanandroid.network.NetworkResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -38,17 +39,4 @@ open class BaseViewModel : ViewModel(){
         }
     }
 
-    protected fun <T> collectNetworkResult(
-        flow: Flow<NetworkResult<T>>,
-        onStateChange: (NetworkResult<T>) -> Unit
-    ) {
-        viewModelScope.launch {
-            flow.collect { result ->
-                if (result is NetworkResult.Error && result.code == -1001) {
-                    return@collect
-                }
-                onStateChange(result)
-            }
-        }
-    }
 }

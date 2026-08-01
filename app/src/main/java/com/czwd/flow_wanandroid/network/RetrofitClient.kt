@@ -1,5 +1,10 @@
 package com.czwd.flow_wanandroid.network
 
+import android.os.Handler
+import android.os.Looper
+import com.blankj.utilcode.util.ToastUtils
+import com.google.gson.Gson
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -9,13 +14,38 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     private const val BASE_URL = "https://www.wanandroid.com/"
+    private const val CODE_NOT_LOGIN = -1001
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+    private val authInterceptor = Interceptor{chain ->
+        val request = chain.request()
+        val response = chain.proceed(request)
+
+        val bodyString = response.peekBody(Long.MAX_VALUE).string()
+        val gson = Gson()
+        try {
+            val baseResponse = gson.fromJson(bodyString, RawResponse::class.java)
+            if (baseResponse.errorCode == CODE_NOT_LOGIN) {
+                Handler(Looper.getMainLooper()).post {
+                    ToastUtils.showLong("登录已过期，请重新登录")
+                    // TODO: 跳转登录页，例如：
+                    // val intent = Intent(FlowApplication.context, LoginActivity::class.java)
+                    // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    // FlowApplication.context.startActivity(intent)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        response
+    }
+
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
+        .addInterceptor(authInterceptor)
         .addInterceptor { chain ->
             val originalRequest = chain.request()
             val newRequest = originalRequest.newBuilder()
@@ -42,6 +72,11 @@ object RetrofitClient {
         //retrofit属性会报错,因为内联函数无法调用私有成员变量,为什么呢,因为内联函数会在被调用的
         //地方获取到内联函数中的代码,比如retrofit,kotlin依然保证其封装性,所以会报错,提示无法访问
         return retrofit.create(T::class.java)
+    }
+
+    private class RawResponse {
+        val errorCode: Int = 0
+        val errorMsg: String? = null
     }
 
 }

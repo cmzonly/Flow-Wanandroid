@@ -7,6 +7,10 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class HomeViewModel(private val homeRepository: HomeRepository) : BaseViewModel() {
 
+    init {
+        getBanner()
+    }
+
 
     private val _bannerFlow = MutableStateFlow<NetworkResult<List<Banner>>>(NetworkResult.Loading)
     val bannerFlow = _bannerFlow.asStateFlow()
@@ -19,9 +23,4 @@ class HomeViewModel(private val homeRepository: HomeRepository) : BaseViewModel(
         }
     }
 
-    fun getBanner1(){
-        collectNetworkResult(homeRepository.getBanner()){
-            _bannerFlow.value = it
-        }
-    }
 }
