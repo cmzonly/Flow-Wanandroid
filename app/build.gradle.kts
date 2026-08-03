@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -17,7 +19,26 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        ndk {
+            abiFilters.addAll(listOf("armeabi","armeabi-v7a"))
+        }
+
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            val properties = rootProject.file("local.properties").let { file ->
+                Properties().apply {
+                    load(file.inputStream())
+                }
+            }
+            storeFile = file(properties["KEY_PATH"] as String)
+            storePassword = properties["KEY_PASSWORD"] as String
+            keyAlias = properties["KEY_ALIAS"] as String
+            keyPassword = properties["ALIAS_PASSWORD"] as String
+        }
     }
 
     buildTypes {
@@ -27,6 +48,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
 
         debug {
@@ -81,5 +103,8 @@ dependencies {
      * 代码更模块化，不用全塞在 Application 里
      */
     implementation(libs.androidx.app.startup)
+    //Navigation导航
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
 }

@@ -2,6 +2,7 @@ package com.czwd.flow_wanandroid.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.enableSavedStateHandles
 import androidx.viewbinding.ViewBinding
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
@@ -13,7 +14,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = getViewBinding()
         setContentView(binding.root)
-
         initView()
         initData()
         initObserver()

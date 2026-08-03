@@ -23,3 +23,32 @@
                 android:value="androidx.startup" />
             ....
         </provider>
+
+# viewmodel的生命周期,当activity中按返回键后对应的viewmodel是否还在
+    情况一：按返回键，正常退出
+    当用户按返回键，Activity 会正常走完 onDestroy() 流程并被系统回收。
+
+    ViewModel 还“活着”吗？
+    技术上，onDestroy() 执行时 ViewModel 还存在。但紧接着，系统会判断该 Activity 不是因配置更改（如旋转屏幕）而重建，于是会自动调用 ViewModelStore 的 clear() 方法。
+
+    最终结果：被清除
+    它会立即回调 ViewModel 的 onCleared() 方法。在这一刻之后，ViewModel 就不再存续了，持有的资源也会被释放。
+
+    情况二：配置更改，系统重建
+    为了对比，像旋转屏幕这种配置更改也走 onDestroy，但系统知道它马上要被重建。
+
+    ViewModel 还“活着”吗？
+    这时 ViewModel 实例会被保留下来，并传递给新的 Activity 实例，数据完好无损。你不需要在 onCleared() 里做清理。
+
+    部分源码:
+    if (event == Lifecycle.Event.ON_DESTROY) {
+                // 1. 判断是不是配置更改
+                if (!isChangingConfigurations()) {
+                    // 2. 不是配置更改？清空 ViewModelStore
+                    getViewModelStore().clear();
+                }
+    }
+
+# Android 资源限定符的顺序规则
+    drawable-{locale}-{night}-{density}-{touchscreen}...
+    因此,暗色模式对应的drawable为drawable-night-xxhdpi

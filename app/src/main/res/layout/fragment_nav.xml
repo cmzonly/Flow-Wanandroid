@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.viewpager2.widget.ViewPager2
+        app:layout_constraintBottom_toTopOf="@id/bnv"
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+   <!-- labelVisibilityMode:
+            显示全部文字
+        itemIconTint="@null:
+            BottomNavigationView 会自动给所有图标套上一层颜色（由主题 colorControlNormal 决定），
+            不管你用的是什么颜色的图片，都会被统一染成同一个颜色。
+            设为 @null 后： 不再对着色，图标保持原图的颜色不变
+
+        itemActiveIndicatorStyle:
+        设置自定义样式,自定义样式中修改BottomNavigationView的color,
+        这样选中后item背景色就是自定义颜色了,否则为主题色.这个问题只在Material3主题中会出现
+        因为Material3 的 BottomNavigationView 选中背景是由 itemActiveIndicatorColor 控制的，不是 itemBackground
+    -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:itemActiveIndicatorStyle="@style/TransparentIndicatorStyle"
+        app:itemBackground="@android:color/transparent"
+        app:itemRippleColor="@android:color/transparent"
+        app:labelVisibilityMode="labeled"
+        app:itemTextColor="@color/bottom_item_selector"
+        app:menu="@menu/bottom_menu"
+        android:id="@+id/bnv"
+        app:itemIconTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
