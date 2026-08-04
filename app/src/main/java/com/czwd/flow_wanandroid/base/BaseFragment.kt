@@ -1,24 +1,17 @@
 package com.czwd.flow_wanandroid.base
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
-import androidx.core.view.isNotEmpty
-import androidx.core.view.marginTop
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.blankj.utilcode.util.BarUtils
+import androidx.viewbinding.ViewBinding
 import com.czwd.flow_wanandroid.utils.GlobalViewModel
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment(){
@@ -49,6 +42,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
         initObserver()
     }
 
+    open fun initObserver(){}
+
     open fun initListen(){}
 
     override fun onDestroyView() {
@@ -73,7 +68,19 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
         }
     }
 
-    open fun initObserver(){
+   protected  fun userObserverOnStarted( block : ( CoroutineScope.() -> Unit)?=null){
+        lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED){
+                    block?.invoke(this)
+                }
+
+        }
+    }
+
+    protected  fun userObserver( block : (CoroutineScope. () -> Unit)?=null){
+        lifecycleScope.launch {
+            block?.invoke(this)
+        }
     }
 
     abstract fun initData()

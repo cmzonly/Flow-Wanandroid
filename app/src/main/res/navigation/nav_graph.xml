@@ -2,13 +2,31 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/NavFragment"
+    app:startDestination="@id/splashFragment"
     android:id="@+id/nav_graph">
 
     <fragment
-        tools:layout="@layout/fragment_home"
+        android:id="@+id/splashFragment"
+        android:name="com.czwd.flow_wanandroid.module.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash"
+        >
+
+        <!--        两个属性的含义：
+        app:popUpTo="@id/splashFragment" — 导航时弹出到 SplashFragment 为止
+        app:popUpToInclusive="true" — 把 SplashFragment 本身也从返回栈中移除-->
+        <action
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/NavFragment"
+            android:id="@+id/splash_to_nav"/>
+    </fragment>
+
+    <fragment
+        tools:layout="@layout/fragment_nav"
         android:name="com.czwd.flow_wanandroid.nav.NavFragment"
         android:id="@+id/NavFragment"
         />
+
+
 
 </navigation>
