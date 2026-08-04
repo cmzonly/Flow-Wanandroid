@@ -6,8 +6,7 @@
 
 
     <TextView
-        android:gravity="bottom"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="30sp"
         android:text="首页"
         android:layout_width="match_parent"

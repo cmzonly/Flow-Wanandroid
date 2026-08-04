@@ -16,4 +16,9 @@ class UserFragment : BaseFragment<FragmentUserBinding>() {
 
     override fun initView() {
     }
+
+    override fun onResume() {
+        super.onResume()
+        setLightStatusBar(true)
+    }
 }

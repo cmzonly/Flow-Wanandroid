@@ -26,7 +26,7 @@ class NavFragment : BaseFragment<FragmentNavBinding>() {
 
         binding.vp.adapter = NavAdapter(fragment = this)
         //设置左右预加载页面数,即缓存页面数,切换时不会重新创建Fragment
-//        binding.vp.offscreenPageLimit = 3
+        binding.vp.offscreenPageLimit = 3
         //在底部BottomNavigationView的menu中设置icon为选择器无法正常显示选中与未选中图标,设置此属性即可
         binding.bnv.itemIconTintList = null
         // 去除 ViewPager2 内部 RecyclerView 的边缘阴影
