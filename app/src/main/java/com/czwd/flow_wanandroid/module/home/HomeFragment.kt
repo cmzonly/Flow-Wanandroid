@@ -23,6 +23,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     ) = FragmentHomeBinding.inflate(inflater, container, false)
 
     override fun initData() {
+        homeViewModel.getHomeData()
     }
 
     override fun initView() {

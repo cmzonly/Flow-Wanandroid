@@ -37,9 +37,18 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
-        initData()
+        initLazyData()
         initListen()
         initObserver()
+    }
+
+    private  fun initLazyData() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                initData()
+            }
+        }
+
     }
 
     open fun initObserver(){}

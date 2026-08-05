@@ -1,7 +1,6 @@
 package com.czwd.flow_wanandroid.module.home
 
 import com.czwd.flow_wanandroid.base.BaseRepository
-import com.czwd.flow_wanandroid.network.RetrofitClient
 
 class HomeRepository(private val homeApi: HomeApi) : BaseRepository() {
 
@@ -9,5 +8,12 @@ class HomeRepository(private val homeApi: HomeApi) : BaseRepository() {
         safeApiCall {
             homeApi.getBanner()
         }
+
+    fun getArticleList(pageNum: Int) =
+        safeApiCall {
+            homeApi.getArticleList(pageNum)
+        }
+
+
 
 }

@@ -2,27 +2,21 @@ package com.czwd.flow_wanandroid.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blankj.utilcode.util.ToastUtils
-import com.czwd.flow_wanandroid.network.NetworkResult
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 open class BaseViewModel : ViewModel(){
-    /**
-     * 在viewModelScope中安全地收集Flow
-     */
-    protected fun <T> collectFlow(
-        flow: Flow<T>,
-        onSuccess: (T) -> Unit,
-        onError: ((Throwable) -> Unit)? = null
-    ) {
-        viewModelScope.launch {
-            flow.catch { e ->
-                onError?.invoke(e)
-            }.collect { data ->
-                onSuccess(data)
-            }
+
+    private val loadedKeys = mutableSetOf<String>()
+
+    protected fun loadOnce(key : String , block: suspend () -> Unit){
+        if (loadedKeys.contains(key)) return
+        loadedKeys.add(key)
+        launchOnViewModelScope { block() }
+    }
+
+    fun deleteLoadKey(vararg keys : String){
+        keys.forEach {
+            loadedKeys.remove(it)
         }
     }
 
