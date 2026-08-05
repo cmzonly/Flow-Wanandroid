@@ -1,17 +1,14 @@
 package com.czwd.flow_wanandroid.nav
 
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
-import com.blankj.utilcode.util.ToastUtils
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseFragment
 import com.czwd.flow_wanandroid.databinding.FragmentNavBinding
-import com.google.android.material.navigation.NavigationBarView
+
 
 class NavFragment : BaseFragment<FragmentNavBinding>() {
     override fun getViewBinding(
@@ -25,8 +22,8 @@ class NavFragment : BaseFragment<FragmentNavBinding>() {
     override fun initView() {
 
         binding.vp.adapter = NavAdapter(fragment = this)
-        //设置左右预加载页面数,即缓存页面数,切换时不会重新创建Fragment
-        binding.vp.offscreenPageLimit = 3
+        //不需要设置,viewpager2有缓存策略,查看生命周期并不会多次执行fragment的onCreateView方法
+        //binding.vp.offscreenPageLimit = 3
         //在底部BottomNavigationView的menu中设置icon为选择器无法正常显示选中与未选中图标,设置此属性即可
         binding.bnv.itemIconTintList = null
         // 去除 ViewPager2 内部 RecyclerView 的边缘阴影
@@ -38,22 +35,22 @@ class NavFragment : BaseFragment<FragmentNavBinding>() {
             when(it.itemId){
                 R.id.item_home ->{
                     if (binding.bnv.selectedItemId != R.id.item_home){
-                        binding.vp.currentItem = 0
+                        binding.vp.setCurrentItem(0 , false)
                     }
                 }
                 R.id.item_project ->{
                     if (binding.bnv.selectedItemId != R.id.item_project){
-                        binding.vp.currentItem = 1
+                        binding.vp.setCurrentItem(1 , false)
                     }
                 }
                 R.id.item_search ->{
                     if (binding.bnv.selectedItemId != R.id.item_search){
-                        binding.vp.currentItem = 2
+                        binding.vp.setCurrentItem(2 , false)
                     }
                 }
                 R.id.item_user ->{
                     if (binding.bnv.selectedItemId != R.id.item_user){
-                        binding.vp.currentItem = 3
+                        binding.vp.setCurrentItem(3 , false)
                     }
                 }
             }
