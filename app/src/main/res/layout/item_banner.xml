@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:shape_radius="20dp"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_banner"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</com.hjq.shape.layout.ShapeConstraintLayout>

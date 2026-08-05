@@ -106,5 +106,9 @@ dependencies {
     //Navigation导航
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
+    //banner轮播库
+    implementation(libs.banner)
+    //图片加载库
+    implementation(libs.glide)
 
 }

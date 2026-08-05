@@ -6,12 +6,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <TextView
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:text="首页"
+    <!-- 推荐直接使用库提供的比例属性 -->
+    <com.youth.banner.Banner
+        android:layout_marginTop="20dp"
+        android:id="@+id/banner"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="260dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 
 
 
