@@ -8,16 +8,25 @@ open class BaseViewModel : ViewModel(){
 
     private val loadedKeys = mutableSetOf<String>()
 
-    protected fun loadOnce(key : String , block: suspend () -> Unit){
-        if (loadedKeys.contains(key)) return
-        loadedKeys.add(key)
+    /**
+     * 自动请求
+     */
+    protected fun requestOfAuto(key : String, block: suspend () -> Unit){
+        if (loadedKeys.contains(key))return
+        else loadedKeys.add(key)
         launchOnViewModelScope { block() }
     }
 
-    fun deleteLoadKey(vararg keys : String){
-        keys.forEach {
-            loadedKeys.remove(it)
-        }
+    protected fun requestOfManual(block: suspend () -> Unit){
+        launchOnViewModelScope { block() }
+    }
+
+    /**
+     * 重置指定 key，使下次 requestOfAuto 可以重新执行
+     * 用于下拉刷新等场景：先 reset，再 requestOfAuto
+     */
+    protected fun resetKey(key: String) {
+        loadedKeys.remove(key)
     }
 
     /**

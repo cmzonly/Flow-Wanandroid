@@ -1,19 +1,17 @@
 package com.czwd.flow_wanandroid.base
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.enableSavedStateHandles
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
-import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.utils.GlobalViewModel
-import com.google.android.material.internal.EdgeToEdgeUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     private var _binding: VB? = null
@@ -28,7 +26,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             GlobalViewModel.saveStatusBarHeight(systemBars.top)
-            v.setPadding(systemBars.left, 0, systemBars.right, 0)
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
             insets
         }
         initView()
@@ -48,4 +46,13 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     abstract fun initView()
 
     abstract fun getViewBinding(): VB
+
+
+    fun startObserve(block : CoroutineScope.() -> Unit){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                block.invoke(this)
+            }
+        }
+    }
 }

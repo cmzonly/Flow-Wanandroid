@@ -33,7 +33,7 @@ class SplashFragment: BaseFragment<FragmentSplashBinding>() {
     }
 
     override fun initObserver() {
-        userObserverOnStarted {
+        startObserverOnStarted {
             launch{
                 splashViewModel.timeFlow.collectLatest {
                     binding.tvTime.text = "$it"

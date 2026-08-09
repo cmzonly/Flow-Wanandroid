@@ -71,4 +71,15 @@
             }
            
         }
+# shapeview地址
+[CLICK HERE] https://github.com/getActivity/ShapeView
+
+# basequickadapter 地址
+[CLICK HERE] https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki
+
+# xpopup
+[click here] 
+
+# 今日头条屏幕适配
+[click here] https://github.com/JessYanCoding/AndroidAutoSize/issues/13
       

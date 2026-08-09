@@ -1,4 +1,5 @@
 [versions]
+agentwebCore = "v5.1.1-androidx"
 agp = "9.2.1"
 banner = "2.2.3"
 converterGson = "3.0.0"
@@ -13,20 +14,28 @@ material = "1.10.0"
 activityKtx = "1.8.0"
 constraintlayout = "2.1.4"
 retrofit = "3.0.0"
+room= "2.8.4"
 shapeview = "11.0"
 utilcodex = "1.31.1"
 xpopup = "2.10.0"
 baserecyclerviewadapterhelper4 = "4.4.1"
 androidautosize = "v1.2.1"
 koin = "3.5.6"
-koinAndroid = "3.5.6"
 appStartup = "1.2.0"
 navigation = "2.8.4"
+datastore = "1.1.7"
+ksp = "2.3.11"
+recyclerview = "1.4.0"
 
 
 
 [libraries]
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+agentweb-core = { module = "io.github.justson:agentweb-core", version.ref = "agentwebCore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 banner = { module = "io.github.youth5201314:banner", version.ref = "banner" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -45,11 +54,12 @@ xpopup = { module = "com.github.li-xiaojun:XPopup", version.ref = "xpopup" }
 androidautosize = { module = "com.github.JessYanCoding:AndroidAutoSize", version.ref = "androidautosize" }
 baserecyclerviewadapterhelper4 = { module = "io.github.cymchad:BaseRecyclerViewAdapterHelper4", version.ref = "baserecyclerviewadapterhelper4" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 androidx-app-startup = { module = "androidx.startup:startup-runtime", version.ref = "appStartup" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
-
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 

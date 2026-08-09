@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -110,5 +111,15 @@ dependencies {
     implementation(libs.banner)
     //图片加载库
     implementation(libs.glide)
+    //DataStore持久化
+    implementation(libs.androidx.datastore.preferences)
+    //room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    /**带进度条webview*/
+    implementation(libs.agentweb.core)
+    implementation(libs.androidx.recyclerview)
+
 
 }

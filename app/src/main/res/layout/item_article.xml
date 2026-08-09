@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.layout.ShapeConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:shape_solidColor="@color/white"
+    app:shape_radius="20dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:padding="20dp"
+    app:shape_shadowColor="@color/theme"
+    app:shape_shadowSize="4dp"
+    android:layout_marginBottom="16dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        android:id="@+id/iv_collect"
+        android:src="@drawable/collect1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"/>
+
+    <TextView
+        app:layout_constraintBottom_toTopOf="@id/layout_content"
+        app:layout_constraintTop_toTopOf="@id/iv_collect"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@id/iv_collect"
+        android:text="开放Api 无法访问问题"
+        android:id="@+id/tv_title"
+        style="@style/tv_black_bold_28"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/layout_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintStart_toStartOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@id/iv_collect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+        <com.hjq.shape.view.ShapeTextView
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="6dp"
+            android:textColor="@color/red"
+            android:text="置顶"
+            android:textSize="18sp"
+            app:shape_strokeColor="@color/red"
+            app:shape_strokeSize="1dp"
+            app:shape_solidColor="@android:color/transparent"
+            android:id="@+id/tv_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="1111"
+            android:layout_marginStart="10dp"
+            app:layout_goneMarginStart="0dp"
+            app:layout_constraintStart_toEndOf="@id/tv_tag"
+            android:id="@+id/tv_author"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/tv_gray_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="1111"
+            android:layout_marginStart="10dp"
+            app:layout_goneMarginStart="0dp"
+            app:layout_constraintStart_toEndOf="@id/tv_author"
+            android:id="@+id/tv_type"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/tv_gray_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="1111"
+            android:layout_marginStart="10dp"
+            app:layout_goneMarginStart="0dp"
+            app:layout_constraintStart_toEndOf="@id/tv_type"
+            android:id="@+id/tv_time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/tv_gray_18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</com.hjq.shape.layout.ShapeConstraintLayout>

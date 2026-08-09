@@ -1,5 +1,5 @@
 package com.czwd.flow_wanandroid.module.home
-data class Banner(
+data class HomeBanner(
     val desc: String,
     val id: Int,
     val imagePath: String,

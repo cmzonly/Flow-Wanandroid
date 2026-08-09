@@ -1,8 +1,11 @@
 package com.czwd.flow_wanandroid.network
 
 sealed class NetworkResult<out T> {
+
+    data object Idle : NetworkResult<Nothing>()
     data class Success<T>(var data : T) : NetworkResult<T>()
     data object Loading : NetworkResult<Nothing>()
+
     data class Error(val code: Int? = null, val message: String? = null) : NetworkResult<Nothing>()
 
     val isSuccess: Boolean

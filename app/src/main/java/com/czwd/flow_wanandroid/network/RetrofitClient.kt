@@ -3,12 +3,17 @@ package com.czwd.flow_wanandroid.network
 import android.os.Handler
 import android.os.Looper
 import com.blankj.utilcode.util.ToastUtils
+import com.czwd.flow_wanandroid.utils.GlobalViewModel
 import com.google.gson.Gson
+import okhttp3.Cookie
+import okhttp3.CookieJar
+import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
@@ -19,6 +24,20 @@ object RetrofitClient {
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+
+    private val cookieStore = ConcurrentHashMap<String, MutableList<Cookie>>()
+
+    private val cookieJar = object : CookieJar {
+        override fun saveFromResponse(url: HttpUrl, cookies: List<okhttp3.Cookie>) {
+            CookieDataStoreManager.saveCookies(url, cookies)
+        }
+
+        override fun loadForRequest(url: HttpUrl): List<okhttp3.Cookie> {
+            return CookieDataStoreManager.loadCookies(url)
+        }
+    }
+
+
 
     private val authInterceptor = Interceptor{chain ->
         val request = chain.request()
@@ -35,6 +54,10 @@ object RetrofitClient {
                     // val intent = Intent(FlowApplication.context, LoginActivity::class.java)
                     // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     // FlowApplication.context.startActivity(intent)
+                    //使用navigation跳转到登录页面
+                    GlobalViewModel.notLogin()
+
+
                 }
             }
         } catch (e: Exception) {
@@ -44,6 +67,7 @@ object RetrofitClient {
     }
 
     private val okHttpClient = OkHttpClient.Builder()
+        .cookieJar(cookieJar)
         .addInterceptor(loggingInterceptor)
         .addInterceptor(authInterceptor)
         .addInterceptor { chain ->

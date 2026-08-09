@@ -4,28 +4,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.czwd.flow_wanandroid.FlowApplication
 import com.czwd.flow_wanandroid.R
-import com.czwd.flow_wanandroid.module.home.Banner
+import com.czwd.flow_wanandroid.databinding.ItemBannerBinding
+import com.czwd.flow_wanandroid.module.home.HomeBanner
 import com.youth.banner.adapter.BannerAdapter
 
 class HomeBannerAdapter(
-    bannerList : List<Banner> = emptyList()
-) : BannerAdapter<Banner, HomeBannerAdapter.MyBannerHolder>(bannerList) {
+    bannerList : List<HomeBanner> = emptyList()
+) : BannerAdapter<HomeBanner, HomeBannerAdapter.MyBannerHolder>(bannerList) {
     override fun onCreateHolder(
-        parent: ViewGroup?,
+        parent: ViewGroup,
         viewType: Int
     ): MyBannerHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_banner, parent, false)
-        return MyBannerHolder( view)
+        return MyBannerHolder( parent)
     }
 
     override fun onBindView(
         holder: MyBannerHolder?,
-        p1: Banner?,
+        p1: HomeBanner?,
         p2: Int,
         p3: Int
     ) {
@@ -36,8 +35,11 @@ class HomeBannerAdapter(
         }
     }
 
-   class MyBannerHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-           var ivBanner : ImageView=  itemView.findViewById(R.id.iv_banner)
+   class MyBannerHolder(
+       viewGroup: ViewGroup,
+       binding: ItemBannerBinding = ItemBannerBinding.inflate(LayoutInflater.from(viewGroup.context) , viewGroup , false)
+   ) : RecyclerView.ViewHolder(binding.root){
+           var ivBanner : ImageView=  binding.ivBanner
 
     }
 }

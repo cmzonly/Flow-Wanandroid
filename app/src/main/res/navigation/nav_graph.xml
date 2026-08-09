@@ -25,7 +25,33 @@
         tools:layout="@layout/fragment_nav"
         android:name="com.czwd.flow_wanandroid.nav.NavFragment"
         android:id="@+id/NavFragment"
-        />
+        >
+        <action
+            app:destination="@id/loginFragment"
+            android:id="@+id/nva_to_login"
+            />
+
+        <action
+            android:id="@+id/nav_to_web"
+            app:destination="@id/webFragment"
+            />
+    </fragment>
+
+    <fragment
+        android:name="com.czwd.flow_wanandroid.module.login.LoginFragment"
+        android:id="@+id/loginFragment"
+        tools:layout="@layout/fragment_login"
+        >
+
+    </fragment>
+
+    <fragment
+        android:name="com.czwd.flow_wanandroid.module.web.WebFragment"
+        android:id="@+id/webFragment"
+        tools:layout="@layout/fragment_web"
+        >
+
+    </fragment>
 
 
 

@@ -15,5 +15,15 @@ class HomeRepository(private val homeApi: HomeApi) : BaseRepository() {
         }
 
 
+    /**
+     * 收藏
+     */
+    fun cmzCollect(cmzId : Int) =
+        safeApiCall {
+            homeApi.cmzCollect(cmzId)
+        }
+
+
+
 
 }
