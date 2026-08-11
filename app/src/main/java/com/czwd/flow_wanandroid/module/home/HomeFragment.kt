@@ -5,22 +5,24 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter4.QuickAdapterHelper
+import com.chad.library.adapter4.loadState.LoadState
+import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseFragment
 import com.czwd.flow_wanandroid.databinding.FragmentHomeBinding
 import com.czwd.flow_wanandroid.module.home.adapter.ArticleAdapter
 import com.czwd.flow_wanandroid.module.home.adapter.HomeBannerAdapter
+import com.czwd.flow_wanandroid.module.home.adapter.HomeBannerWrapper
 import com.czwd.flow_wanandroid.module.web.WebFragment
 import com.czwd.flow_wanandroid.network.NetworkResult
 import com.youth.banner.indicator.CircleIndicator
 import com.youth.banner.transformer.DepthPageTransformer
 import com.youth.banner.transformer.ZoomOutPageTransformer
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import androidx.recyclerview.widget.ConcatAdapter
-import com.blankj.utilcode.util.ToastUtils
-import com.czwd.flow_wanandroid.module.home.adapter.HomeBannerWrapper
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     lateinit var articleAdapter: ArticleAdapter
@@ -29,7 +31,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     lateinit var homeBannerAdapter: HomeBannerAdapter
 
-    lateinit var concatAdapter : ConcatAdapter
+    lateinit var helper :QuickAdapterHelper
 
     companion object{
         private const val TAG = "HomeFragment"
@@ -43,8 +45,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     ) = FragmentHomeBinding.inflate(inflater, container, false)
 
     override fun initData() {
-        homeViewModel.getBannerData()
-        homeViewModel.getArticleListData()
+        homeViewModel.getHomeData()
     }
 
     override fun initView() {
@@ -53,17 +54,32 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun initAdapter() {
+        articleAdapter = ArticleAdapter()
+        helper = QuickAdapterHelper.Builder(articleAdapter)
+            .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener{
+                override fun onLoad() {
+                    Log.d("tttt", "mCurrentPager: $${homeViewModel.mCurrentPager}")
+                    homeViewModel.getArticleListData(homeViewModel.mCurrentPager)
+                }
+
+                override fun onFailRetry() {
+                    Log.d("bbb", "onFailRetry: ")
+                }
+
+            })
+            .build().addBeforeAdapter(homeBannerWrapper)
+
+
+
         binding.rv.apply {
             layoutManager = LinearLayoutManager(requireActivity() , LinearLayoutManager.VERTICAL , false)
-            articleAdapter = ArticleAdapter()
-            concatAdapter = ConcatAdapter(homeBannerWrapper , articleAdapter)
-            adapter = concatAdapter
+            adapter = helper.adapter
             articleAdapter.setOnItemClickListener { adapter, _, positon ->
-                ToastUtils.showLong(positon)
-                val articleInfo = articleAdapter.getItem(positon)
-                WebFragment.startToWebFragment(this@HomeFragment,articleInfo.link)
+                    ToastUtils.showLong(positon)
+                    val articleInfo = articleAdapter.getItem(positon)
+                    WebFragment.startToWebFragment(this@HomeFragment,articleInfo.link)
             }
-            
+
             articleAdapter.addOnItemChildClickListener(R.id.iv_collect){adapter, _, position ->
                 homeViewModel.cmzCollect(adapter.getItem(position).id)
             }
@@ -75,12 +91,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         homeBannerAdapter = HomeBannerAdapter()
         homeBannerWrapper = HomeBannerWrapper{banner ->
             banner.apply {
-                homeBannerAdapter = HomeBannerAdapter()
                 setAdapter(homeBannerAdapter)
                 indicator = CircleIndicator(this@HomeFragment.requireContext()) // 设置圆形指示器
-                isAutoLoop(true) // 开启自动轮播
-                setLoopTime(3000)                      // 轮播间隔3秒
-                addBannerLifecycleObserver(this@HomeFragment);      // 【推荐】让Banner自动管理生命周期（开始/停止轮
+                isAutoLoop(true)                                               // 开启自动轮播
+                setLoopTime(3000)                                              // 轮播间隔3秒
+                addBannerLifecycleObserver(this@HomeFragment);         // 【推荐】让Banner自动管理生命周期（开始/停止轮播)
                 //setIndicatorSelectedColor(@ColorInt)                       设置指示器选中颜色
                 //setIndicatorNormalColor(@ColorInt)                          设置指示器默认颜色
                 addPageTransformer(DepthPageTransformer())  //  ZoomOutPageTransformer
@@ -90,7 +105,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 setOnBannerListener{banner , _ ->
                     WebFragment.startToWebFragment(this@HomeFragment, banner?.url ?: "")
                 }
-
             }
         }
 
@@ -101,22 +115,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun initObserver() {
         startObserverOnStarted {
             launch {
-                        homeViewModel.bannerFlow.collect {
-                            when(it){
-                                NetworkResult.Idle -> {}
-
-                                is NetworkResult.Loading -> {
-                                }
-                                is NetworkResult.Success -> {
-                                    homeBannerAdapter.setDatas(it.data)
-                                    homeBannerWrapper.item = it.data
-                                }
-                                is NetworkResult.Error -> {
-                                    Log.d(TAG, "Error:${it.code}--${it.message} ")
-                                }
-
-                            }
+                homeViewModel.homeFlow.collectLatest {
+                    when(it){
+                       is NetworkResult.Idle -> {}
+                      is  NetworkResult.Loading -> {
+                          isShowLoading(true)
+                      }
+                        is NetworkResult.Error -> {
+                            isShowLoading(false)
                         }
+
+                        is NetworkResult.Success<HomeAllData> -> {
+                            isShowLoading(false)
+                            homeBannerAdapter.setDatas(it.data.bannerData)
+                            homeBannerWrapper.item =it.data.bannerData
+                            articleAdapter.submitList(it.data.article.datas)
+                            if (!it.data.article.over) {
+                                helper.trailingLoadState = LoadState.NotLoading(false)
+                                homeViewModel.mCurrentPager++
+                            }else{
+                                helper.trailingLoadState = LoadState.NotLoading(true)
+                            }
+
+                        }
+                    }
+                }
             }
 
             launch {
@@ -127,11 +150,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                         }
                         is NetworkResult.Success -> {
                             Log.d(TAG, "Success:${it.data} ")
-                            articleAdapter.submitList(it.data.datas)
+                            articleAdapter.addAll(it.data.datas)
+                            if (it.data.over){
+                                helper.trailingLoadState = LoadState.NotLoading(true)
+                            }else{
+                                homeViewModel.mCurrentPager++
+                                helper.trailingLoadState = LoadState.NotLoading(false)
+                            }
 
                         }
                         is NetworkResult.Error -> {
-
+                            Log.d(TAG, "Error:${it.message} ")
                         }
                         NetworkResult.Idle -> {}
                     }

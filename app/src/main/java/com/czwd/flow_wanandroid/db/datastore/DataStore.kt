@@ -9,3 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 val Context.cookieDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "cookie_store"
 )
+
+val Context.userDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "user_store"
+)

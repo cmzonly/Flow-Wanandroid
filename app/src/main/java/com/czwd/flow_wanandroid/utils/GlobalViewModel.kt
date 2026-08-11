@@ -1,5 +1,6 @@
 package com.czwd.flow_wanandroid.utils
 
+import android.util.Log
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ object GlobalViewModel {
     val loginFlow get() = _loginFlow.asSharedFlow()
 
     fun saveStatusBarHeight(statusBarHeight : Int){
+        Log.d("ttt", "statusBarHeight:${statusBarHeight} ")
         _statusBarHeightFlow.value = statusBarHeight
     }
 

@@ -1,6 +1,7 @@
 package com.czwd.flow_wanandroid.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.czwd.flow_wanandroid.utils.GlobalViewModel
 import com.lxj.xpopup.XPopup
@@ -77,6 +77,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
         binding.root.apply {
             GlobalViewModel.statusBarHeightFlow.value.let {
                 if (it > 0){
+                    Log.d("tttt", "onStart: ${GlobalViewModel.statusBarHeightFlow.value}")
                     setPadding(paddingLeft, GlobalViewModel.statusBarHeightFlow.value, paddingRight, paddingBottom)
                 }
             }

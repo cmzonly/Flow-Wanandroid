@@ -5,13 +5,18 @@ import com.czwd.flow_wanandroid.network.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.zip
 
 class HomeViewModel(private val homeRepository: HomeRepository) : BaseViewModel() {
+     var mCurrentPager = 0
     companion object{
         private const val KEY_BANNER = "banner"
         private const val KEY_ARTICLE = "article"
         private const val KEY_COLLECT = "collect"
     }
+
+    private var _homeFlow = MutableStateFlow<NetworkResult<HomeAllData>>(NetworkResult.Idle)
+    val homeFlow = _homeFlow.asStateFlow()
 
 
     //banner
@@ -26,18 +31,33 @@ class HomeViewModel(private val homeRepository: HomeRepository) : BaseViewModel(
     private val _collectFlow = MutableStateFlow<NetworkResult<CollectResponse>>(NetworkResult.Idle)
     val collectFlow get() = _collectFlow.asStateFlow()
 
-    fun getBannerData(){
-        requestOfAuto(KEY_BANNER) {
-            homeRepository.getBanner().collectLatest {
-                _bannerFlow.value = it
+    fun getHomeData(){
+        requestOfManual {
+            _homeFlow.value = NetworkResult.Loading
+            homeRepository.getBanner().zip(homeRepository.getArticleList(0)){
+                    bannerResult , articleResult ->
+                Pair(bannerResult , articleResult)
+            }.collectLatest { (bannerResult , articleResult) ->
+                _homeFlow.value =
+                    when{
+                        bannerResult is NetworkResult.Success && articleResult is NetworkResult.Success ->
+                            NetworkResult.Success(
+                                HomeAllData(bannerResult.data, articleResult.data)
+                            )
+                        bannerResult is NetworkResult.Error -> bannerResult
+                        articleResult is NetworkResult.Error -> articleResult
+                        else -> NetworkResult.Idle
+                    }
             }
         }
     }
 
-    fun getArticleListData(pageNum: Int = 0, isRefresh : Boolean = false){
-        if (isRefresh) resetKey(KEY_ARTICLE)
+
+
+
+    fun getArticleListData(currentPager: Int = 0){
         requestOfAuto(KEY_ARTICLE){
-                homeRepository.getArticleList(pageNum).collectLatest {
+                homeRepository.getArticleList(currentPager).collectLatest {
                     _articleFlow.value = it
                 }
         }

@@ -5,7 +5,6 @@ import android.os.Looper
 import com.blankj.utilcode.util.ToastUtils
 import com.czwd.flow_wanandroid.utils.GlobalViewModel
 import com.google.gson.Gson
-import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
@@ -13,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
@@ -25,7 +23,6 @@ object RetrofitClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    private val cookieStore = ConcurrentHashMap<String, MutableList<Cookie>>()
 
     private val cookieJar = object : CookieJar {
         override fun saveFromResponse(url: HttpUrl, cookies: List<okhttp3.Cookie>) {

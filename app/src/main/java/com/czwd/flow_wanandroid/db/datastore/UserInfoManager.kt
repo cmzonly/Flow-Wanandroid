@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 object UserInfoManager {
-    private val ds get() = FlowApplication.context.cookieDataStore
+    private val ds get() = FlowApplication.context.userDataStore
 
     private val KEY_ID = intPreferencesKey("user_id")
     private val KEY_USERNAME= stringPreferencesKey("username")

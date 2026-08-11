@@ -11,9 +11,9 @@ open class BaseViewModel : ViewModel(){
     /**
      * 自动请求
      */
-    protected fun requestOfAuto(key : String, block: suspend () -> Unit){
-        if (loadedKeys.contains(key))return
-        else loadedKeys.add(key)
+    protected fun requestOfAuto(key : String = "", block: suspend () -> Unit){
+//        if (loadedKeys.contains(key))return
+//        else loadedKeys.add(key)
         launchOnViewModelScope { block() }
     }
 
