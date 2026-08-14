@@ -24,7 +24,7 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
     }
 
 
-    override fun getViewBinding(
+    override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentWebBinding  =

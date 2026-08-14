@@ -37,7 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     }
 
-    override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+    override fun initBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
 
 }

@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class SplashFragment: BaseFragment<FragmentSplashBinding>() {
     private val splashViewModel by viewModels<SplashViewModel>()
 
-    override fun getViewBinding(
+    override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentSplashBinding = FragmentSplashBinding.inflate(inflater,container,false)

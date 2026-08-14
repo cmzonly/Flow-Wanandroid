@@ -11,7 +11,7 @@ import com.czwd.flow_wanandroid.databinding.FragmentNavBinding
 
 
 class NavFragment : BaseFragment<FragmentNavBinding>() {
-    override fun getViewBinding(
+    override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentNavBinding = FragmentNavBinding.inflate(inflater,container,false)

@@ -9,7 +9,7 @@ import com.czwd.flow_wanandroid.base.BaseFragment
 import com.czwd.flow_wanandroid.databinding.FragmentSearchBinding
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
-    override fun getViewBinding(
+    override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentSearchBinding = FragmentSearchBinding.inflate(inflater , container ,false)

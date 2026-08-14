@@ -1,6 +1,7 @@
 package com.czwd.flow_wanandroid.base
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +22,12 @@ import me.jessyan.autosize.AutoSize
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment(){
 
+    /** 保存 RecyclerView 滚动状态 */
+    private var pendingRvState: Parcelable? = null
+
     private var _binding : VB?=null
-    val binding get() = _binding!!
+    val binding get() = _binding ?: throw IllegalStateException("Binding accessed after onDestroyView")
+    private lateinit var xpopupBuild: XPopup.Builder
     lateinit var loadingPopupView: LoadingPopupView
 
     override fun onCreateView(
@@ -30,65 +35,36 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = getViewBinding(inflater , container)
+        _binding = initBinding(inflater , container)
         return binding.root
     }
 
-    protected fun setLightStatusBar(isLight: Boolean) {
-        WindowInsetsControllerCompat(
-            requireActivity().window,
-            requireActivity().window.decorView
-        ).isAppearanceLightStatusBars = isLight
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        xpopupBuild = XPopup.Builder(context)
         loadingPopupView = XPopup.Builder(context).asLoading("正在加载中")
         initView()
-        initLazyData()
+        initData()
         initListen()
         initObserver()
     }
 
-    private  fun initLazyData() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                initData()
-            }
-        }
 
-    }
+    // ==================== 抽象方法 ====================
 
-    open fun initObserver(){}
+   protected abstract fun initView()
 
-    open fun initListen(){}
+    protected abstract fun initData()
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    protected open fun initListen(){}
 
-    abstract fun getViewBinding(
+   protected open fun initObserver(){}
+
+    protected abstract fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): VB
 
-    override fun onStart() {
-        super.onStart()
-        binding.root.apply {
-            GlobalViewModel.statusBarHeightFlow.value.let {
-                if (it > 0){
-                    Log.d("tttt", "onStart: ${GlobalViewModel.statusBarHeightFlow.value}")
-                    setPadding(paddingLeft, GlobalViewModel.statusBarHeightFlow.value, paddingRight, paddingBottom)
-                }
-            }
-
-        }
-    }
-
-    fun isShowLoading(isShow : Boolean){
-        if (isShow) loadingPopupView.show() else loadingPopupView.dismiss()
-    }
-
+    // ==================== Flow 收集工具 ====================
    protected  fun startObserverOnStarted(block : (suspend CoroutineScope.() -> Unit)?=null){
         lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -98,18 +74,79 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
         }
     }
 
-    protected  fun startObserver( block : (suspend CoroutineScope. () -> Unit)?=null){
-        lifecycleScope.launch {
-            block?.invoke(this)
-        }
-    }
-
-    abstract fun initData()
-
-    abstract fun initView()
-
+    /**
+     * onresume调用,处理跳转webview后回退异常尺寸问题
+     */
     override fun onResume() {
         super.onResume()
         AutoSize.autoConvertDensityOfGlobal(activity)
+    }
+
+    // ==================== RecyclerView 状态保存 ====================
+
+    /**
+     * 保存 RecyclerView 滚动位置
+     * 子类重写此方法以提供 LayoutManager
+     */
+    protected open fun saveRecyclerViewState() {
+        // 默认不保存，子类按需实现
+    }
+
+    /**
+     * 恢复 RecyclerView 滚动位置
+     * 子类重写此方法以恢复 LayoutManager 状态
+     */
+    protected open fun restoreRecyclerViewState(state: Parcelable) {
+        // 默认不恢复，子类按需实现
+    }
+
+    /**
+     * 暂存滚动状态（在 onPause 中调用）
+     */
+    protected fun holdRecyclerViewState(state: Parcelable?) {
+        pendingRvState = state
+    }
+
+    /**
+     * 此方法在 onViewCreated(View, Bundle) 之后、onStart() 之前调用
+     */
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        // 恢复滚动状态
+        pendingRvState?.let { state ->
+            restoreRecyclerViewState(state)
+            //pendingRvState 是一个"一次性"的状态包：存进去 → 恢复一次 → 清空，保证不会用过期数据覆盖当前的滚动位置。
+            pendingRvState = null
+        }
+    }
+
+    /**
+     * 设置状态栏是否为亮色模式
+     */
+    protected fun setLightStatusBar(isLight: Boolean) {
+        WindowInsetsControllerCompat(
+            requireActivity().window,
+            requireActivity().window.decorView
+        ).isAppearanceLightStatusBars = isLight
+    }
+
+    fun isShowLoading(isShow : Boolean){
+        if (isShow) loadingPopupView.show() else loadingPopupView.dismiss()
+    }
+
+    /**
+     * 暂停保存 RecyclerView 滚动状态
+     * 当布局管理器需要保存其状态时调用。这是保存滚动位置、配置以及其他任何可能需要的信息的好时机，
+     * 以便在重新创建布局管理器时恢复相同的布局状态
+     */
+    override fun onPause() {
+        super.onPause()
+        // 保存滚动状态（子类可重写）
+        saveRecyclerViewState()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

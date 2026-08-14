@@ -6,7 +6,7 @@ import com.czwd.flow_wanandroid.base.BaseFragment
 import com.czwd.flow_wanandroid.databinding.FragmentProjectBinding
 
 class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
-    override fun getViewBinding(
+    override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentProjectBinding = FragmentProjectBinding.inflate(inflater,container , false)

@@ -119,7 +119,10 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     /**带进度条webview*/
     implementation(libs.agentweb.core)
+    /**最新版recyclerview,可设置ConcatAdapter*/
     implementation(libs.androidx.recyclerview)
+    /**下拉刷新库*/
+    implementation(libs.androidx.swiperefreshlayout)
 
 
 }

@@ -15,37 +15,34 @@ import kotlinx.coroutines.launch
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     private var _binding: VB? = null
-    val binding get() = _binding!!
+   protected val binding get() = _binding ?: throw IllegalStateException("Binding accessed after onDestroy")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        _binding = getViewBinding()
+        _binding = initBinding()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            GlobalViewModel.saveStatusBarHeight(systemBars.top)
-            v.setPadding(systemBars.left, 0, systemBars.right, 0)
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            GlobalViewModel.saveStatusBarHeight(systemBars.top)
+//            v.setPadding(systemBars.left, 0, systemBars.right, 0)
+//            insets
+//        }
         initView()
         initData()
         initObserver()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 
-    abstract fun initObserver()
 
-    abstract fun initData()
+    protected  abstract fun initObserver()
 
-    abstract fun initView()
+    protected abstract fun initData()
 
-    abstract fun getViewBinding(): VB
+    protected abstract fun initView()
+
+   protected abstract fun initBinding(): VB
 
 
     fun startObserve(block : CoroutineScope.() -> Unit){
@@ -54,5 +51,10 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
                 block.invoke(this)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

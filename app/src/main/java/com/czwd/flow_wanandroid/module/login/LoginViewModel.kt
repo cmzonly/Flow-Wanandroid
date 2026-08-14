@@ -28,11 +28,13 @@ class LoginViewModel(val loginRepository: LoginRepository): BaseViewModel() {
         passWord : String = "",
         repeatPassWord : String = ""
     ){
-        requestOfAuto(KEY_REGISTER){
+        launchOnMain {
             loginRepository.register(userName ,passWord , repeatPassWord).collectLatest {
                 _registerFlow.value = it
             }
         }
+
+
     }
 
     /**
@@ -42,7 +44,7 @@ class LoginViewModel(val loginRepository: LoginRepository): BaseViewModel() {
         userName : String = "" ,
         passWord : String = ""
     ){
-        requestOfManual{
+        launchOnMain {
             loginRepository.login(userName , passWord).collectLatest {
                 _loginFlow.value = it
             }

@@ -22,7 +22,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         private const val TAG = "LoginFragment"
     }
 
-    override fun getViewBinding(
+    override fun initBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentLoginBinding =

@@ -1,10 +1,10 @@
 package com.czwd.flow_wanandroid.module.login
 
-import com.czwd.flow_wanandroid.base.BaseRepository
 import com.czwd.flow_wanandroid.network.NetworkResult
+import com.wanandroid.app.network.flowOfApiSimple
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class LoginRepository(val loginApi : LoginApi) : BaseRepository() {
+class LoginRepository(val loginApi : LoginApi) {
 
 
     /**
@@ -14,7 +14,7 @@ class LoginRepository(val loginApi : LoginApi) : BaseRepository() {
         username : String,
         password : String,
         repassword : String,
-    ) = safeApiCall {
+    ) = flowOfApiSimple {
             loginApi.register(username , password , repassword)
         }
 
@@ -24,7 +24,7 @@ class LoginRepository(val loginApi : LoginApi) : BaseRepository() {
     fun login(
         username : String,
         password : String
-    ) = safeApiCall {
+    ) = flowOfApiSimple {
         loginApi.login(username ,password )
     }
 

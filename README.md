@@ -1,3 +1,4 @@
+//以下仅供自己提供步骤
 # Jetpack App start库使用
     1.作用:它让你在 Application.onCreate() 之前就完成初始化工作（底层通过 ContentProvider 实现）
     好处是:
@@ -69,8 +70,15 @@
                     setPadding(paddingLeft, GlobalViewModel.statusBarHeightFlow.value, paddingRight, paddingBottom)
                 }
             }
-           
+           //暂时有问题,没发现原因
         }
+
+# basequickadapter v4.4.1使用
+    1.使用多布局
+    2.加载更多
+
+
+
 # shapeview地址
 [CLICK HERE] https://github.com/getActivity/ShapeView
 
