@@ -124,21 +124,19 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
 
     /** 加载更多 */
     fun loadMore() {
-//        Log.d(TAG, "loadMore: ")
         if (_uiState.value.isLoading || _uiState.value.isArticleOver) return
         val nextPage = _uiState.value.currentPage
         loadArticleList(page = nextPage)
     }
     private fun loadArticleList(page: Int) {
-        _uiState.value = _uiState.value.copy(
-            isLoading = true,
-            errorMsg = null
-        )
         launchOnMain {
             repository.getArticleList(page).collectLatest { result ->
                 when (result) {
                     is NetworkResult.Loading -> {
-
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = true,
+                            errorMsg = null
+                        )
                     }
 
                     is NetworkResult.Success -> {
@@ -152,7 +150,6 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
                             // 加载更多：追加
                             _uiState.value.articleList + paginationData.datas
                         }
-
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
                             articleList = newList,

@@ -74,21 +74,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun initObserver() {
         startObserverOnStarted {
             launch {
-                viewmodel.uiState.distinctUntilChangedBy {
-                    it.articleList.size
-                }.collectLatest {
+                viewmodel.uiState.collectLatest {
                     renderState(it)
                 }
             }
-
-//            launch {
-//                viewmodel.uiState
-//                    .distinctUntilChangedBy { it.articleList.size }
-//                    .collectLatest {
-//                        helper.trailingLoadState = LoadState.NotLoading(it.isArticleOver)
-//                        Log.d(TAG, "size:${it.articleList.size} ")
-//                    }
-//            }
         }
     }
 
@@ -104,7 +93,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
       // === 文章列表 ===
       articleAdapter.submitList(state.articleList)
 
-      helper.trailingLoadState = LoadState.NotLoading(state.isArticleOver)
+      if(!state.isLoading){
+          helper.trailingLoadState = LoadState.NotLoading(state.isArticleOver)
+      }
 
       // === 错误处理 ===
       state.errorMsg?.let { msg ->
@@ -134,7 +125,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         helper = QuickAdapterHelper.Builder(articleAdapter)
             .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener{
                 override fun onLoad() {
-                    Log.d(TAG, "onLoad: ")
+                    Log.d("bbbb", "1.onLoad: ")
                     helper.trailingLoadState = LoadState.Loading
                     viewmodel.loadMore()
                 }
@@ -145,7 +136,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
 
             })
-            .setTrailPreloadSize(2)
+            .setTrailPreloadSize(1)
             .build().addBeforeAdapter(homeBannerWrapper)
 
         binding.rv.apply {
