@@ -93,7 +93,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
       // === 文章列表 ===
       articleAdapter.submitList(state.articleList)
 
-      if(!state.isLoading){
+      if(!state.isLoading && state.articleList.isNotEmpty()){
           helper.trailingLoadState = LoadState.NotLoading(state.isArticleOver)
       }
 
