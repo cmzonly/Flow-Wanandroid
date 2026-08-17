@@ -18,7 +18,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         startObserveOnStarted {
             launch {
                 GlobalViewModel.loginFlow.collectLatest {
-                    Log.d("gggg", "initObserver: ")
+                    Log.d("gggg", "测试: ")
                     //这里需要判断,否则当请求时多次返回-1001,会多次尝试导航到 LoginFragment,如果在loginframgnt
                     //发现找不到,就会报错
                    val navController =  findNavController(R.id.navView)
