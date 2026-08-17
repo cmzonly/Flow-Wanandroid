@@ -13,6 +13,9 @@ import kotlinx.coroutines.launch
 
 open class BaseViewModel : ViewModel(){
 
+    // ==================== 是否是首次加载 ====================
+    var isFirstLoad = true
+
     // ==================== 协程工具 ====================
 
     /** 统一异常处理器 */
