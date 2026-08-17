@@ -19,12 +19,11 @@ import kotlinx.coroutines.flow.collectLatest
  */
 class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
 
-    // ==================== 是否是首次加载 ====================
-    var isFirstLoad = true
-
     // ==================== 私有可变状态 ====================
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    //下拉刷新
 
     // ==================== 公开方法（UI 调用） ====================
 
@@ -34,15 +33,11 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
         loadArticleList(page = 0)
     }
 
-//    /** 下拉刷新 */
-//    fun refresh() {
-//        _uiState.value = _uiState.value.copy(
-//            isRefreshing = true,
-//            errorMsg = null
-//        )
-//        loadBanner()
-//        loadArticleList(page = 0)
-//    }
+    /** 下拉刷新 */
+    fun refresh() {
+        _uiState.value = _uiState.value.copy(isRefreshing = true)
+        loadHomeData()
+    }
 
 
 
@@ -52,20 +47,25 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
             repository.collect(id).collectLatest { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        updateCollectState(id, true)
+                        Log.d("cccc", "collectSuccess: ")
+                        updateCollectState(id , true)
                         _uiState.value = _uiState.value.copy(
                             collectState = AsyncState.Success(true)
                         )
                     }
                     is NetworkResult.Error -> {
+                        Log.d("cccc", "collectError:${result.message} ")
                         _uiState.value = _uiState.value.copy(
                             collectState = AsyncState.Error(
                                 code = result.code,
                                 message = result.message
-                            )
+                            ),
+                            errorMsg = result.message
                         )
                     }
-                    else -> {}
+                    else -> {
+                        Log.d("cccc", "collectOther: ")
+                    }
                 }
             }
         }
@@ -77,7 +77,7 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
             repository.unCollect(id).collectLatest { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        updateCollectState(id, false)
+                       updateCollectState(id , false)
                         _uiState.value = _uiState.value.copy(
                             collectState = AsyncState.Success(false)
                         )
@@ -140,6 +140,7 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
                     }
 
                     is NetworkResult.Success -> {
+
                         val paginationData = result.data
 
                         // 根据页码决定是替换还是追加
@@ -151,6 +152,8 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
                             _uiState.value.articleList + paginationData.datas
                         }
                         _uiState.value = _uiState.value.copy(
+                            isShowLoading = false,
+                            isRefreshing = false,
                             isLoading = false,
                             articleList = newList,
                             isArticleOver = paginationData.over,
@@ -160,6 +163,7 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
 
                     is NetworkResult.Error -> {
                         _uiState.value = _uiState.value.copy(
+                            isShowLoading = false,
                             isLoading = false,
                             errorMsg = result.message
                         )

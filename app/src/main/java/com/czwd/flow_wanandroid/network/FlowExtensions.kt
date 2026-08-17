@@ -1,7 +1,12 @@
 package com.wanandroid.app.network
 
+import android.util.Log
+import com.czwd.flow_wanandroid.FlowApplication
+import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.ApiResponse
 import com.czwd.flow_wanandroid.network.NetworkResult
+import com.czwd.flow_wanandroid.network.RetrofitClient
+import com.czwd.flow_wanandroid.utils.GlobalViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -63,15 +68,22 @@ inline fun <reified T> flowOfApiSimple(
     runCatching {
         apiCall()
     }.onSuccess { apiResponse ->
-        if (apiResponse.errorCode == 0 && apiResponse.data != null) {
-            emit(NetworkResult.Success(apiResponse.data!!))
-        } else {
-            emit(
-                NetworkResult.Error(
+        when(apiResponse.errorCode){
+            RetrofitClient.CODE_SUCCESS ->{
+                emit(NetworkResult.Success(apiResponse.data))
+            }
+
+            RetrofitClient.CODE_NOT_LOGIN ->{
+                Log.d("gggg", "CODE_NOT_LOGIN: ")
+                GlobalViewModel.notLogin()
+            }
+
+            else -> {
+                emit(NetworkResult.Error(
                     code = apiResponse.errorCode,
-                    message = apiResponse.errorMsg ?: "Unknown error"
-                )
-            )
+                    message = apiResponse.errorMsg ?: FlowApplication.context.getString(R.string.unknow_error)
+                ))
+            }
         }
     }.onFailure { throwable ->
         emit(

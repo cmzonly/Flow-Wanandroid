@@ -9,8 +9,13 @@ import com.czwd.flow_wanandroid.base.AsyncState
  * 根据里面的字段决定如何渲染界面。
  */
 data class HomeUiState(
+    /**是否显示加载框*/
+    val isShowLoading: Boolean = true,
     /** 是否正在加载 */
     val isLoading: Boolean = false,
+
+    /**是否下拉刷新*/
+    val isRefreshing: Boolean = false,
 
 
     /** Banner 数据 */

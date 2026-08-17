@@ -3,13 +3,10 @@ package com.czwd.flow_wanandroid.base
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
-import com.czwd.flow_wanandroid.utils.GlobalViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -45,11 +42,17 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
    protected abstract fun initBinding(): VB
 
 
-    fun startObserve(block : CoroutineScope.() -> Unit){
+    fun startObserveOnStarted(block : CoroutineScope.() -> Unit){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 block.invoke(this)
             }
+        }
+    }
+
+    fun startObserve(block: CoroutineScope.() -> Unit){
+        lifecycleScope.launch {
+            block.invoke(this)
         }
     }
 

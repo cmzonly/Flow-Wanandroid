@@ -82,13 +82,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
   private  fun renderState(state: HomeUiState) {
-
       // === Banner ===
       homeBannerAdapter.setDatas(state.banner)
       homeBannerWrapper.item  = state.banner
 
-      // === 下拉刷新 ===
-//      binding.swipeRefreshLayout.isRefreshing = state.isRefreshing
+      //下拉刷新
+      binding.swipeRefreshLayout.isRefreshing = state.isRefreshing
 
       // === 文章列表 ===
       articleAdapter.submitList(state.articleList)
@@ -96,6 +95,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
       if(!state.isLoading && state.articleList.isNotEmpty()){
           helper.trailingLoadState = LoadState.NotLoading(state.isArticleOver)
       }
+
+      // === 加载框 ===
+      isShowLoading(state.isShowLoading)
 
       // === 错误处理 ===
       state.errorMsg?.let { msg ->
@@ -105,19 +107,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initData() {
-        if (viewmodel.isFirstLoad){
-            viewmodel.loadHomeData()
-            viewmodel.isFirstLoad = false
-        }
+       if (viewmodel.isFirstLoad){
+           viewmodel.loadHomeData()
+           viewmodel.isFirstLoad = false
+       }
     }
 
 
     // ==================== UI 初始化 ====================
 
     private fun setupSwipeRefresh() {
-//        binding.swipeRefreshLayout.setOnRefreshListener {
-//            viewmodel.refresh()
-//        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewmodel.refresh()
+        }
     }
     private fun setUpRecyclerView() {
         setUpBanner()
@@ -133,6 +135,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 override fun onFailRetry() {
                     helper.trailingLoadState = LoadState.Loading
                     viewmodel.loadMore()
+                }
+
+                override fun isAllowLoading(): Boolean {
+                    return !binding.swipeRefreshLayout.isRefreshing
                 }
 
             })
