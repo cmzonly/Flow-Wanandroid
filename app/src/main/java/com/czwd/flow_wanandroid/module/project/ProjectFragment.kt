@@ -53,7 +53,7 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
         startObserverOnStarted {
             launch {
                 viewmodel.uiState.collectLatest {
-                    //loading显示
+                    //loading显示  >>>
                     binding.spinkitview.visibility = if (it.isShowLoading) View.VISIBLE else View.GONE
                     //=== 下拉刷新状态 ===
                     binding.swiperefreshlayout.isRefreshing = it.isRefresh
