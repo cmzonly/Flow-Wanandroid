@@ -3,7 +3,33 @@
     <style name="Base.Theme.FlowWanandroid" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="android:windowIsTranslucent">true</item>
+        <!--  透明背景  -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="Theme.FlowWanandroid" parent="Base.Theme.FlowWanandroid" />
+
+    <style name="TransparentIndicatorStyle" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="BottomNavTextActive" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">26sp</item>  <!-- 选中时的文字大小 -->
+    </style>
+
+    <style name="BottomNavTextInactive" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">26sp</item>  <!-- 未选中时的文字大小，默认是14sp -->
+<!--        <item name="android:textColor">@android:color/darker_gray</item> &lt;!&ndash; 可选 &ndash;&gt;-->
+    </style>
+
+    <style name="BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="itemIconSize">32dp</item> <!-- 设置图标大小为32dp -->
+    </style>
+
 </resources>

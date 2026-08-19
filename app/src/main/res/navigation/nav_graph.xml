@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/splashFragment"
+    android:id="@+id/nav_graph">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.czwd.flow_wanandroid.module.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash"
+        >
+
+        <!--        两个属性的含义：
+        app:popUpTo="@id/splashFragment" — 导航时弹出到 SplashFragment 为止
+        app:popUpToInclusive="true" — 把 SplashFragment 本身也从返回栈中移除-->
+        <action
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/NavFragment"
+            android:id="@+id/splash_to_nav"/>
+    </fragment>
+
+    <fragment
+        tools:layout="@layout/fragment_nav"
+        android:name="com.czwd.flow_wanandroid.nav.NavFragment"
+        android:id="@+id/NavFragment"
+        >
+        <action
+            app:destination="@id/loginFragment"
+            android:id="@+id/nva_to_login"
+            />
+
+        <action
+            android:id="@+id/nav_to_web"
+            app:destination="@id/webFragment"
+            />
+    </fragment>
+
+    <fragment
+        android:name="com.czwd.flow_wanandroid.module.login.LoginFragment"
+        android:id="@+id/loginFragment"
+        tools:layout="@layout/fragment_login"
+        >
+
+    </fragment>
+
+    <fragment
+        android:name="com.czwd.flow_wanandroid.module.web.WebFragment"
+        android:id="@+id/webFragment"
+        tools:layout="@layout/fragment_web"
+        >
+
+    </fragment>
+
+
+
+</navigation>
