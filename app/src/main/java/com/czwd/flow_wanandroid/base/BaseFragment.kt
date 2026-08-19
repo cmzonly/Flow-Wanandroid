@@ -2,7 +2,6 @@ package com.czwd.flow_wanandroid.base
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
-import com.czwd.flow_wanandroid.utils.GlobalViewModel
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.impl.LoadingPopupView
 import kotlinx.coroutines.CoroutineScope
@@ -44,16 +42,36 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
         loadingPopupView = XPopup.Builder(context).asLoading("正在加载中")
         initView()
         initData()
+        checkFirstLoad()
         initListen()
         initObserver()
     }
+
+
+    //============ 首次加载必须重写的两个方法 ============
+    protected open fun provideViewModel() : BaseViewModel?=null
+
+    protected open fun onFirstLoad() {
+
+    }
+
+    private  fun checkFirstLoad() {
+        val vm = provideViewModel()
+        if (vm != null && vm.isFirstLoad){
+            onFirstLoad()
+            vm.isFirstLoad = false
+        }
+
+    }
+
+
 
 
     // ==================== 抽象方法 ====================
 
    protected abstract fun initView()
 
-    protected abstract fun initData()
+    protected open fun initData(){}
 
     protected open fun initListen(){}
 
@@ -63,6 +81,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?
     ): VB
+
+
 
     // ==================== Flow 收集工具 ====================
    protected  fun startObserverOnStarted(block : (suspend CoroutineScope.() -> Unit)?=null){

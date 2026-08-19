@@ -39,8 +39,6 @@ class HomeViewModel(private val repository: HomeRepository) : BaseViewModel() {
         loadHomeData()
     }
 
-
-
     /** 收藏文章 */
     fun collect(id: Int) {
         launchOnMain {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ToastUtils
@@ -15,6 +16,7 @@ import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.chad.library.adapter4.util.addOnDebouncedChildClick
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseFragment
+import com.czwd.flow_wanandroid.base.BaseViewModel
 import com.czwd.flow_wanandroid.databinding.FragmentHomeBinding
 import com.czwd.flow_wanandroid.module.home.adapter.ArticleAdapter
 import com.czwd.flow_wanandroid.module.home.adapter.HomeBannerAdapter
@@ -106,13 +108,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
       }
     }
 
-    override fun initData() {
-       if (viewmodel.isFirstLoad){
-           viewmodel.loadHomeData()
-           viewmodel.isFirstLoad = false
-       }
-    }
 
+    override fun provideViewModel(): BaseViewModel = viewmodel
+
+    override fun onFirstLoad() {
+        viewmodel.loadHomeData()
+    }
 
     // ==================== UI 初始化 ====================
 

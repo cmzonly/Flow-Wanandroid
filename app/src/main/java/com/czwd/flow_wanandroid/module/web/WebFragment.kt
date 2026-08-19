@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseFragment
+import com.czwd.flow_wanandroid.base.BaseViewModel
 import com.czwd.flow_wanandroid.databinding.FragmentWebBinding
 import com.just.agentweb.AgentWeb
 import kotlinx.coroutines.flow.collectLatest
@@ -30,9 +31,12 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
     ): FragmentWebBinding  =
         FragmentWebBinding.inflate(layoutInflater , container ,false)
 
-    override fun initData() {
-        webViewModel.setUrl(arguments?.getString(KEY_URL))
+    override fun provideViewModel(): BaseViewModel? = webViewModel
 
+    override fun onFirstLoad() {
+        arguments?.getString(KEY_URL)?.let {
+            webViewModel.setUrl(it)
+        }
     }
 
     override fun initView() {

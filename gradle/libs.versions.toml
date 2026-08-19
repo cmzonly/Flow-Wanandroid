@@ -1,6 +1,7 @@
 [versions]
 agentwebCore = "v5.1.1-androidx"
 agp = "9.2.1"
+androidSpinkit = "1.4.0"
 banner = "2.2.3"
 converterGson = "3.0.0"
 coreKtx = "1.10.1"
@@ -31,6 +32,7 @@ recyclerview = "1.4.0"
 
 
 [libraries]
+android-spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "androidSpinkit" }
 androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 agentweb-core = { module = "io.github.justson:agentweb-core", version.ref = "agentwebCore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

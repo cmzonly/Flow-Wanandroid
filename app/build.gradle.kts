@@ -123,6 +123,8 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     /**下拉刷新库*/
     implementation(libs.androidx.swiperefreshlayout)
+    /**Android-SpinKit*/
+    implementation(libs.android.spinkit)
 
 
 }

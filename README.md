@@ -54,25 +54,6 @@
     drawable-{locale}-{night}-{density}-{touchscreen}...
     因此,暗色模式对应的drawable为drawable-night-xxhdpi
 
-# Android沉浸式状态栏使用
-    1.在Activity中调用setContentView(binding.root)之前调用enableEdgeToEdge(),该方法会填充全屏,但不包括 padding,在屏幕左上角
-      写的view会在状态栏左上角,怎么处理?使用系统自带方法设置padding
-            ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            GlobalViewModel.saveStatusBarHeight(systemBars.top)    //获取系统状态栏高度
-            v.setPadding(systemBars.left, 0, systemBars.right, 0)   //top设为0,保持沉浸式
-            insets
-        }
-    2.在basefragment的onstart方法中获取globalViewmodel保存的值,设置给每个fragment的根view
-        binding.root.apply { 
-            GlobalViewModel.statusBarHeightFlow.value.let { 
-                if (it > 0){
-                    setPadding(paddingLeft, GlobalViewModel.statusBarHeightFlow.value, paddingRight, paddingBottom)
-                }
-            }
-           //暂时有问题,没发现原因
-        }
-
 # basequickadapter v4.4.1使用
     1.使用多布局
     2.加载更多
@@ -90,4 +71,7 @@
 
 # 今日头条屏幕适配
 [click here] https://github.com/JessYanCoding/AndroidAutoSize/issues/13
+
+# SpinKit(loading三方库)
+[click here] https://github.com/ybq/Android-SpinKit
       

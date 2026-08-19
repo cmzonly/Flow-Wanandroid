@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/theme"
+        android:background="@color/white"
         android:id="@+id/navView"
         app:navGraph="@navigation/nav_graph"
         app:defaultNavHost = "true"
