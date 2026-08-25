@@ -141,7 +141,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 override fun isAllowLoading(): Boolean {
                     return !binding.swipeRefreshLayout.isRefreshing
                 }
-
             })
             .setTrailPreloadSize(1)
             .build().addBeforeAdapter(homeBannerWrapper)
@@ -201,6 +200,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     // ==================== 滚动状态保存/恢复 ====================
+
+    override fun onPause() {
+        super.onPause()
+    }
 
     override fun saveRecyclerViewState() {
         // 在 onPause 中调用，保存当前滚动位置

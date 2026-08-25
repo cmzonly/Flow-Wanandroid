@@ -15,8 +15,8 @@
 
     <item
         android:icon="@drawable/search_item_selector"
-        android:id="@+id/item_search"
-        android:title="@string/search"
+        android:id="@+id/item_system"
+        android:title="@string/system"
         />
 
     <item

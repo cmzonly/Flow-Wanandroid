@@ -14,8 +14,6 @@ class HomeBannerWrapper(
    private var block :(Banner<HomeBanner , HomeBannerAdapter>) -> Unit
 ) : BaseSingleItemAdapter<List<HomeBanner>, HomeBannerWrapper.VH>() {
 
-
-
     override fun onCreateViewHolder(
         context: Context,
         parent: ViewGroup,

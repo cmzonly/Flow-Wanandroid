@@ -43,8 +43,8 @@ class NavFragment : BaseFragment<FragmentNavBinding>() {
                         binding.vp.setCurrentItem(1 , false)
                     }
                 }
-                R.id.item_search ->{
-                    if (binding.bnv.selectedItemId != R.id.item_search){
+                R.id.item_system ->{
+                    if (binding.bnv.selectedItemId != R.id.item_system){
                         binding.vp.setCurrentItem(2 , false)
                     }
                 }
@@ -62,7 +62,7 @@ class NavFragment : BaseFragment<FragmentNavBinding>() {
                when(position){
                    0 -> binding.bnv.selectedItemId = R.id.item_home
                    1 -> binding.bnv.selectedItemId = R.id.item_project
-                   2 -> binding.bnv.selectedItemId = R.id.item_search
+                   2 -> binding.bnv.selectedItemId = R.id.item_system
                    3 -> binding.bnv.selectedItemId = R.id.item_user
                }
             }

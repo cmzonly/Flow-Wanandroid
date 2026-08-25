@@ -59,7 +59,6 @@ class ProjectViewModel(val projectRepository: ProjectRepository) : BaseViewModel
      */
     fun fresh(){
         _uiState.value = _uiState.value.copy(
-            isShowLoading = false,
             isRefresh = true
         )
         loadProjectData()
@@ -120,6 +119,7 @@ class ProjectViewModel(val projectRepository: ProjectRepository) : BaseViewModel
                             _uiState.value.projectList + resultData.datas
                         }
                         _uiState.value = _uiState.value.copy(
+                            isShowLoading = false,
                             isLoading = false,
                             projectList = newList,
                             isOver = resultData.over,
@@ -127,7 +127,13 @@ class ProjectViewModel(val projectRepository: ProjectRepository) : BaseViewModel
                         )
 
                     }
-                    is NetworkResult.Error ->{}
+                    is NetworkResult.Error ->{
+                        _uiState.value = _uiState.value.copy(
+                            isShowLoading = false,
+                            isLoading = false,
+                            errorMsg = it.message
+                        )
+                    }
                     else -> {}
                 }
             }

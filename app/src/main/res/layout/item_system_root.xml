@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hjq.shape.view.ShapeTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:id="@+id/tv_title_root"
+    android:gravity="start"
+    android:textColor="@color/theme"
+    android:layout_marginBottom="10dp"
+    android:textSize="32sp"
+    android:textStyle="bold"
+    android:layout_height="wrap_content">
+
+</com.hjq.shape.view.ShapeTextView>

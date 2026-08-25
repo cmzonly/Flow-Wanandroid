@@ -64,9 +64,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
 
     }
 
-
-
-
     // ==================== 抽象方法 ====================
 
    protected abstract fun initView()

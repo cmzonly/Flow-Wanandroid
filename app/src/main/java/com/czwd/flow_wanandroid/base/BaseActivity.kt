@@ -20,12 +20,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         enableEdgeToEdge()
         _binding = initBinding()
         setContentView(binding.root)
-//        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            GlobalViewModel.saveStatusBarHeight(systemBars.top)
-//            v.setPadding(systemBars.left, 0, systemBars.right, 0)
-//            insets
-//        }
         initView()
         initData()
         initObserver()

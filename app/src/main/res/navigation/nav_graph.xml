@@ -35,6 +35,16 @@
             android:id="@+id/nav_to_web"
             app:destination="@id/webFragment"
             />
+
+        <action
+            app:destination="@id/detailsFragment"
+            android:id="@+id/nav_to_details"
+            />
+
+        <action
+            app:destination="@id/searchFragment"
+            android:id="@+id/nav_to_search"
+            />
     </fragment>
 
     <fragment
@@ -49,6 +59,22 @@
         android:name="com.czwd.flow_wanandroid.module.web.WebFragment"
         android:id="@+id/webFragment"
         tools:layout="@layout/fragment_web"
+        >
+
+    </fragment>
+
+    <fragment
+        android:name="com.czwd.flow_wanandroid.module.details.ui.DetailsFragment"
+        android:id="@+id/detailsFragment"
+        tools:layout="@layout/fragment_details"
+        >
+
+    </fragment>
+
+    <fragment
+        android:name="com.czwd.flow_wanandroid.module.search.ui.SearchFragment"
+        android:id="@+id/searchFragment"
+        tools:layout="@layout/fragment_search"
         >
 
     </fragment>

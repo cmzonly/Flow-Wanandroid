@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter4.QuickAdapterHelper
 import com.chad.library.adapter4.loadState.LoadState
 import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
@@ -52,18 +53,21 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
     override fun initObserver() {
         startObserverOnStarted {
             launch {
-                viewmodel.uiState.collectLatest {
-                    //loading显示  >>>
-                    binding.spinkitview.visibility = if (it.isShowLoading) View.VISIBLE else View.GONE
+                viewmodel.uiState.collectLatest { state ->
+                    //=== loading显示  >>>
+                    binding.spinkitview.visibility = if (state.isShowLoading) View.VISIBLE else View.GONE
                     //=== 下拉刷新状态 ===
-                    binding.swiperefreshlayout.isRefreshing = it.isRefresh
+                    binding.swiperefreshlayout.isRefreshing = state.isRefresh
                     //=== 左侧列表 ===
-                    projectTypeAdapter.submitList(it.projectTypeList)
+                    projectTypeAdapter.submitList(state.projectTypeList)
                     //=== 右侧列表 ===
-                    projectListAdapter.submitList(it.projectList)
+                    projectListAdapter.submitList(state.projectList)
                     //上拉加载状态
-                    if (!it.isLoading && it.projectList.isNotEmpty()){
-                        helper.trailingLoadState = LoadState.NotLoading(it.isOver)
+                    if (!state.isLoading && state.projectList.isNotEmpty()){
+                        helper.trailingLoadState = LoadState.NotLoading(state.isOver)
+                    }
+                    state.errorMsg?.let {
+                        ToastUtils.showLong(it)
                     }
                 }
             }

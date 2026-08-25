@@ -4,9 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class User(
-    val userName : String,
-    val userPassword : String
+data class HistoryEntity(
+    val historyName : String
 ) {
     @PrimaryKey(autoGenerate = true)
     var id : Long=0

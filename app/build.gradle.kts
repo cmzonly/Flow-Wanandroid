@@ -125,6 +125,8 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     /**Android-SpinKit*/
     implementation(libs.android.spinkit)
+    /**FlexBox*/
+    implementation(libs.flexbox)
 
 
 }

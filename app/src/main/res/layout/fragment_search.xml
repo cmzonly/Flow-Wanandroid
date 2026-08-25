@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/black"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:text="搜索"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+   <com.hjq.shape.view.ShapeEditText
+       android:textSize="20sp"
+       android:hint="@string/hint_tip"
+       android:paddingStart="20dp"
+       android:paddingEnd="20dp"
+       app:shape_strokeSize="1dp"
+       app:shape_strokeColor="@color/black_50"
+       android:layout_marginTop="10dp"
+       android:layout_marginStart="20dp"
+       android:layout_marginEnd="20dp"
+       app:shape_solidColor="@color/white"
+       android:gravity="start|center_vertical"
+       android:id="@+id/et"
+       app:shape_radius="120dp"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       android:layout_width="match_parent"
+       android:layout_height="60dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_marginTop="20sp"
+        app:layout_constraintTop_toBottomOf="@id/et"
+        app:layout_constraintEnd_toEndOf="@id/et"
+        app:layout_constraintStart_toStartOf="@id/et"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
