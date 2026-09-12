@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.hjq.shape.view.ShapeEditText
-        android:enabled="false"
+    <com.hjq.shape.view.ShapeTextView
         android:textSize="20sp"
         android:hint="@string/hint_tip"
         android:paddingStart="20dp"
@@ -24,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"/>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:overScrollMode="never"
         android:layout_marginEnd="16dp"
@@ -36,5 +36,17 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_width="0dp"
         android:layout_height="0dp"/>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:visibility="gone"
+        app:SpinKit_Color="@color/theme"
+        style="@style/SpinKitView.Large.Wave"
+        app:layout_constraintTop_toTopOf="@id/rv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/spinkitview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

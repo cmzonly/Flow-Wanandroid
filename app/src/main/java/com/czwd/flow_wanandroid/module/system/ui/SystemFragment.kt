@@ -1,17 +1,17 @@
 package com.czwd.flow_wanandroid.module.system.ui
 
-import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.blankj.utilcode.util.ToastUtils
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseFragment
 import com.czwd.flow_wanandroid.base.BaseViewModel
 import com.czwd.flow_wanandroid.databinding.FragmentSystemBinding
 import com.czwd.flow_wanandroid.module.details.ui.DetailsFragment
 import com.czwd.flow_wanandroid.module.system.adapter.SystemAdapter
-import com.czwd.flow_wanandroid.module.system.bean.SystemResponse
 import com.czwd.flow_wanandroid.module.system.vm.SystemViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,8 +28,18 @@ class SystemFragment : BaseFragment<FragmentSystemBinding>() {
     override fun initObserver() {
         startObserverOnStarted {
             viewmodel.systemFlow.collectLatest {
+                //数据列表
                 systemAdapter.submitList(it.systemList)
+
+                //loading显示 or 隐藏
+                binding.spinkitview.visibility = if (it.isShowLoading) View.VISIBLE else View.GONE
             }
+        }
+    }
+
+    override fun initListen() {
+        binding.et.setOnClickListener {
+           findNavController().navigate(R.id.nav_to_search)
         }
     }
 
@@ -37,9 +47,7 @@ class SystemFragment : BaseFragment<FragmentSystemBinding>() {
         binding.rv.apply {
             layoutManager = LinearLayoutManager(context , LinearLayoutManager.VERTICAL , false)
             systemAdapter = SystemAdapter{
-                val bundle = Bundle()
-                bundle.putString("json" , it.toString())
-                findNavController().navigate(R.id.nav_to_details)
+                DetailsFragment.toDetailFragment(this@SystemFragment , it)
             }
             adapter = systemAdapter
         }

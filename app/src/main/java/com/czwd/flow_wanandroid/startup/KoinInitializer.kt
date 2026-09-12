@@ -2,6 +2,7 @@ package com.czwd.flow_wanandroid.startup
 
 import android.content.Context
 import androidx.startup.Initializer
+import com.czwd.flow_wanandroid.module.details.koin.detailsKoin
 import com.czwd.flow_wanandroid.module.home.homeKoin
 import com.czwd.flow_wanandroid.module.login.loginKoin
 import com.czwd.flow_wanandroid.module.project.projectKoin
@@ -17,7 +18,9 @@ class KoinInitializer : Initializer<Unit> {
         startKoin {
             androidLogger()
             androidContext(context)
-            modules(homeKoin , loginKoin , userKoin , projectKoin , searchKoin , systemKoin)
+            modules(homeKoin , loginKoin , userKoin , projectKoin , searchKoin , systemKoin ,
+                detailsKoin
+            )
         }
     }
 

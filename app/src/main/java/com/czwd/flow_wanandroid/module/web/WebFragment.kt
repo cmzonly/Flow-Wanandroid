@@ -19,8 +19,8 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
     companion object{
         const val KEY_URL = "url"
 
-        fun startToWebFragment(fragment : Fragment  , url : String){
-            fragment.findNavController().navigate(R.id.nav_to_web , bundleOf(KEY_URL  to url))
+        fun startToWebFragment(fragment : Fragment  , resId: Int ,url : String){
+            fragment.findNavController().navigate(resId , bundleOf(KEY_URL  to url))
         }
     }
 
@@ -38,6 +38,8 @@ class WebFragment : BaseFragment<FragmentWebBinding>() {
             webViewModel.setUrl(it)
         }
     }
+
+
 
     override fun initView() {
 

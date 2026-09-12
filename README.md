@@ -58,6 +58,24 @@
     1.使用多布局
     2.加载更多
 
+# agp 9.x使用@Parcelize注解
+    1.配置
+    android.builtInKotlin=false
+    android.newDsl=false
+
+    2.添加插件
+    app build.gradle中添加
+    id("org.jetbrains.kotlin.android") // 必须加回来，否则 Kotlin 无法编译
+    id("kotlin-parcelize")
+
+    3.可能需要添加(build.gradle最外层)
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
+
+
 
 
 # shapeview地址
@@ -67,7 +85,7 @@
 [CLICK HERE] https://github.com/CymChad/BaseRecyclerViewAdapterHelper/wiki
 
 # xpopup
-[click here] 
+[click here] https://github.com/junixapp/XPopup
 
 # 今日头条屏幕适配
 [click here] https://github.com/JessYanCoding/AndroidAutoSize/issues/13
@@ -77,4 +95,7 @@
 
 # FlexBox
 [CLICK HERE] https://github.com/google/flexbox-layout
+
+# SwipeRefreshLayout
+[CLIKE HERE] https://blog.csdn.net/2501_93275026/article/details/164305026
       

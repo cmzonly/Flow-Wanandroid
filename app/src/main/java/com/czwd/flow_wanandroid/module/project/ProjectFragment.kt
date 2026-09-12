@@ -11,6 +11,7 @@ import com.chad.library.adapter4.QuickAdapterHelper
 import com.chad.library.adapter4.loadState.LoadState
 import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.chad.library.adapter4.util.setOnDebouncedItemClick
+import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseFragment
 import com.czwd.flow_wanandroid.base.BaseViewModel
 import com.czwd.flow_wanandroid.databinding.FragmentProjectBinding
@@ -109,7 +110,7 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
             adapter = helper.adapter
 
             projectListAdapter.setOnDebouncedItemClick { adapter, view, i ->
-                WebFragment.startToWebFragment(this@ProjectFragment , adapter.getItem(i).link)
+                WebFragment.startToWebFragment(this@ProjectFragment , R.id.nav_home_to_web,adapter.getItem(i).link)
             }
 
         }

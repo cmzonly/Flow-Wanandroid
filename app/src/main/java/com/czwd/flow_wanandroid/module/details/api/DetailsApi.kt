@@ -13,6 +13,6 @@ interface DetailsApi {
     suspend fun getDetailsList(
         @Path("page") page : Int ,
         @Query("cid") id: Int,
-        @Query("page_size") pageSize: Int = 10
+        @Query("page_size") pageSize: Int = 20
     ): ApiResponse<Article>
 }

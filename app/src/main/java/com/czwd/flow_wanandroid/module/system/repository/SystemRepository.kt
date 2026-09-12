@@ -10,4 +10,5 @@ class SystemRepository(private val systemApi: SystemApi) {
      fun getSystemData() = flowOfApiSimple {
          systemApi.getSystemData()
      }
+
 }

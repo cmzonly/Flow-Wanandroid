@@ -150,9 +150,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             layoutManager = linearLayoutManager
             adapter = helper.adapter
             articleAdapter.setOnItemClickListener { adapter, _, positon ->
-                    ToastUtils.showLong(positon)
-                    val articleInfo = articleAdapter.getItem(positon)
-                    WebFragment.startToWebFragment(this@HomeFragment,articleInfo.link)
+                    WebFragment.startToWebFragment(this@HomeFragment,R.id.nav_home_to_web,articleAdapter.getItem(positon).link)
             }
 
             articleAdapter.addOnDebouncedChildClick(R.id.iv_collect){adapter, _, position ->
@@ -186,7 +184,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 //setBannerRound(120f)
                 setBannerGalleryEffect(10,10,10)
                 setOnBannerListener{banner , _ ->
-                    WebFragment.startToWebFragment(this@HomeFragment, banner?.url ?: "")
+                    WebFragment.startToWebFragment(this@HomeFragment, R.id.nav_home_to_web,banner?.url ?: "")
                 }
             }
         }

@@ -32,7 +32,7 @@
             />
 
         <action
-            android:id="@+id/nav_to_web"
+            android:id="@+id/nav_home_to_web"
             app:destination="@id/webFragment"
             />
 
@@ -68,6 +68,11 @@
         android:id="@+id/detailsFragment"
         tools:layout="@layout/fragment_details"
         >
+
+        <action
+            app:destination="@id/webFragment"
+            android:id="@+id/nav_details_to_web"
+            />
 
     </fragment>
 

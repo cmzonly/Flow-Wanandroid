@@ -25,7 +25,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
 
     private var _binding : VB?=null
     val binding get() = _binding ?: throw IllegalStateException("Binding accessed after onDestroyView")
-    private lateinit var xpopupBuild: XPopup.Builder
     lateinit var loadingPopupView: LoadingPopupView
 
     override fun onCreateView(
@@ -38,7 +37,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        xpopupBuild = XPopup.Builder(context)
         loadingPopupView = XPopup.Builder(context).asLoading("正在加载中")
         initView()
         initData()

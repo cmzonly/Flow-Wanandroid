@@ -3,6 +3,14 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
+    id("org.jetbrains.kotlin.android") // 必须加回来，否则 Kotlin 无法编译
+    id("kotlin-parcelize")
+}
+
+configurations {
+    implementation {
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-android-extensions-runtime")
+    }
 }
 
 android {
@@ -21,7 +29,7 @@ android {
         versionName = "1.0"
 
         ndk {
-            abiFilters.addAll(listOf("armeabi","armeabi-v7a"))
+            abiFilters.addAll(listOf("armeabi","armeabi-v7a" , "arm64-v8a"))
         }
 
 
@@ -127,6 +135,10 @@ dependencies {
     implementation(libs.android.spinkit)
     /**FlexBox*/
     implementation(libs.flexbox)
+}
 
-
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
 }

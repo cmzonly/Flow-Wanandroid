@@ -1,7 +1,4 @@
 package com.czwd.flow_wanandroid.module.home
-
-
-
 data class Article(
     val curPage: Int,
     val datas: List<DataX>,

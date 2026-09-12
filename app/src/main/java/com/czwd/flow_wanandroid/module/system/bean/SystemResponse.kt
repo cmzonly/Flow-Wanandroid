@@ -1,6 +1,9 @@
 package com.czwd.flow_wanandroid.module.system.bean
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class SystemResponse(
     val author: String,
     val children: List<Children>,
@@ -16,7 +19,8 @@ data class SystemResponse(
     val type: Int,
     val userControlSetTop: Boolean,
     val visible: Int
-){
+) : Parcelable {
+    @Parcelize
     data class Children(
         val articleList: List<Article>,
         val author: String,
@@ -32,7 +36,8 @@ data class SystemResponse(
         val type: Int,
         val userControlSetTop: Boolean,
         val visible: Int
-    ){
+    ) : Parcelable {
+        @Parcelize
         data class Article(
             val adminAdd: Boolean,
             val apkLink: String,
@@ -68,7 +73,8 @@ data class SystemResponse(
             val userId: Int,
             val visible: Int,
             val zan: Int
-        )
+        ) : Parcelable
+
     }
 
 }
