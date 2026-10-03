@@ -2,6 +2,7 @@ package com.czwd.flow_wanandroid.module.search.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter4.BaseSingleItemAdapter
@@ -32,6 +33,9 @@ class SearchHeardHistoryAdapter : BaseSingleItemAdapter<List<HistoryEntity> , Se
 
     }
 
+
+
+
     override fun onCreateViewHolder(
         context: Context,
         parent: ViewGroup,
@@ -43,6 +47,7 @@ class SearchHeardHistoryAdapter : BaseSingleItemAdapter<List<HistoryEntity> , Se
         val binding : ItemSearchHistoryHeardBinding = ItemSearchHistoryHeardBinding.inflate(LayoutInflater.from(parent.context) , parent , false)
     ) : RecyclerView.ViewHolder(binding.root){
         val rvHistory = binding.rvHistory
+        val ivDelete = binding.ivDelete
 
     }
 }

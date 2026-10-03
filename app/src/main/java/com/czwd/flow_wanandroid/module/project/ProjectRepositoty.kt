@@ -1,6 +1,6 @@
 package com.czwd.flow_wanandroid.module.project
 
-import com.wanandroid.app.network.flowOfApiSimple
+import com.czwd.flow_wanandroid.network.flowOfApiSimple
 
 class ProjectRepository(val projectApi: ProjectApi) {
     //=====   项目分类列表   =====

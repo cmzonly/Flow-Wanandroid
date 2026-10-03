@@ -1,6 +1,6 @@
 package com.czwd.flow_wanandroid.module.user
 
-import com.wanandroid.app.network.flowOfApiSimple
+import com.czwd.flow_wanandroid.network.flowOfApiSimple
 
 class UserRepository(private val userApi: UserApi) {
 

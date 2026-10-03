@@ -1,7 +1,7 @@
 package com.czwd.flow_wanandroid.module.system.repository
 
 import com.czwd.flow_wanandroid.module.system.api.SystemApi
-import com.wanandroid.app.network.flowOfApiSimple
+import com.czwd.flow_wanandroid.network.flowOfApiSimple
 
 class SystemRepository(private val systemApi: SystemApi) {
     /**

@@ -1,7 +1,7 @@
 package com.czwd.flow_wanandroid.module.details.repository
 
 import com.czwd.flow_wanandroid.module.details.api.DetailsApi
-import com.wanandroid.app.network.flowOfApiSimple
+import com.czwd.flow_wanandroid.network.flowOfApiSimple
 
 class DetailsRepository(private val detailsApi : DetailsApi) {
 

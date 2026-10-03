@@ -1,8 +1,6 @@
 package com.czwd.flow_wanandroid.module.login
 
-import com.czwd.flow_wanandroid.network.NetworkResult
-import com.wanandroid.app.network.flowOfApiSimple
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.czwd.flow_wanandroid.network.flowOfApiSimple
 
 class LoginRepository(val loginApi : LoginApi) {
 

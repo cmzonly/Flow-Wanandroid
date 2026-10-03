@@ -1,11 +1,9 @@
-package com.wanandroid.app.network
+package com.czwd.flow_wanandroid.network
 
 import android.util.Log
 import com.czwd.flow_wanandroid.FlowApplication
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.ApiResponse
-import com.czwd.flow_wanandroid.network.NetworkResult
-import com.czwd.flow_wanandroid.network.RetrofitClient
 import com.czwd.flow_wanandroid.utils.GlobalViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

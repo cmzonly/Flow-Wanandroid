@@ -43,6 +43,8 @@
         android:layout_height="wrap_content">
 
         <com.hjq.shape.view.ShapeTextView
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:padding="6dp"
