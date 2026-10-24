@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.StringUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter4.QuickAdapterHelper
+import com.chad.library.adapter4.loadState.LoadState
 import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseFragment
@@ -79,6 +80,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                     //置顶列表
                     searchLikeAdapter.submitList(uiState.likeList ?: emptyList())
 
+                    //加载更多状态
+                    if (!uiState.isLoading && uiState.searchList.isNotEmpty()){
+                        searchListHelper.trailingLoadState = LoadState.NotLoading(uiState.isOver)
+
+                    }
+
 //                    uiState.error.let {
 //                        ToastUtils.showShort(it)
 //                    }
@@ -120,14 +127,18 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         //关闭按钮点击
         binding.ivClose.setOnClickListener {
             binding.et.text?.clear()
+            binding.rvSearch.visibility = View.GONE
         }
 
         //搜索按钮点击
         binding.btnSearch.setOnClickListener {
-            if (StringUtils.isTrimEmpty(binding.et.text.toString())){
+            if (!StringUtils.isTrimEmpty(binding.et.text.toString())){
+                binding.btnSearch.visibility = View.GONE
                 binding.rvSearch.visibility = View.VISIBLE
                 binding.spinkitview.visibility = View.VISIBLE
                 viewmodel.getSearchArticles(keyWord = binding.et.text.toString().trim())
+            }else{
+                ToastUtils.showShort("请输入搜索内容")
             }
 
         }
@@ -167,7 +178,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             searchListHelper = QuickAdapterHelper.Builder(searchListAdapter)
                 .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener{
                     override fun onLoad() {
-//                        viewmodel.loadMore()
+                        viewmodel.loadMore()
                     }
 
                     override fun onFailRetry() {

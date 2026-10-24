@@ -47,6 +47,64 @@ class SearchViewModel(private val repository: SearchRepository) : BaseViewModel(
 //        }
 //    }
 
+
+    //加载更多
+    fun loadMore(){
+        if (_searchFlow.value.isLoading || _searchFlow.value.isOver) return
+        val currentPage = _searchFlow.value.currentPage
+        val currentQuery = _searchFlow.value.query
+        getMoreSearchArticles(currentPage , currentQuery)
+    }
+
+   private fun getMoreSearchArticles(page : Int = 0 , keyWord: String){
+        launchOnMain {
+            repository.getSearchArticles(page , keyWord).collectLatest {
+                when(it){
+                    NetworkResult.Loading -> {
+                        Log.d(TAG, "Loading: ")
+                    }
+                    is NetworkResult.Success<Article> -> {
+                        Log.d(TAG, "Success: ")
+                        val currentData = it.data
+                        val allData = if (page ==0){
+                            currentData.datas
+                        }else{
+                            _searchFlow.value.searchList + currentData.datas
+                        }
+                        _searchFlow.update { state ->
+                            state.copy(
+                                isShowLoading = false,
+                                isLoading = false,
+                                searchList = allData,
+                                isOver = currentData.over,
+                                currentPage = if (currentData.over) page else page + 1
+                            )
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        Log.d(TAG, "Error:${it.message} ")
+                        _searchFlow.value = _searchFlow.value.copy(
+                            isShowLoading = false,
+                            isLoading = false,
+                            error = it.message ?: FlowApplication.context.resources.getString(R.string.unknow_error)
+                        )
+                    }
+                    else -> {
+                        _searchFlow.update { state ->
+                            state.copy(
+                                isLoading = false,
+                                isShowLoading = false
+                            )
+                        }
+                        Log.d(TAG, "else:")
+                    }
+                }
+            }
+        }
+
+    }
+
     /**
      * 获取搜索结果
      */

@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.czwd.flow_wanandroid.FlowApplication
 import com.czwd.flow_wanandroid.db.datastore.cookieDataStore
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
@@ -73,6 +74,7 @@ object CookieDataStoreManager {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun saveCookies(url: HttpUrl, cookies: List<Cookie>) {
         ensureLoaded()
         val host = url.host
