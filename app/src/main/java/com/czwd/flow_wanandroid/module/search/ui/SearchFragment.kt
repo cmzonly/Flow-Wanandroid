@@ -8,7 +8,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.StringUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter4.QuickAdapterHelper
 import com.chad.library.adapter4.loadState.LoadState
 import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
@@ -17,12 +16,14 @@ import com.czwd.flow_wanandroid.base.BaseFragment
 import com.czwd.flow_wanandroid.base.BaseViewModel
 import com.czwd.flow_wanandroid.databinding.FragmentSearchBinding
 import com.czwd.flow_wanandroid.db.room.entity.HistoryEntity
-import com.czwd.flow_wanandroid.module.home.Article
 import com.czwd.flow_wanandroid.module.search.adapter.SearchHeardHotAdapter
 import com.czwd.flow_wanandroid.module.search.adapter.SearchHeardHistoryAdapter
 import com.czwd.flow_wanandroid.module.search.adapter.SearchLikeAdapter
 import com.czwd.flow_wanandroid.module.search.adapter.SearchListAdapter
+import com.czwd.flow_wanandroid.module.search.bean.SearchUiState
 import com.czwd.flow_wanandroid.module.search.vm.SearchViewModel
+import com.czwd.flow_wanandroid.module.web.WebFragment
+import com.czwd.flow_wanandroid.utils.PopupUtil
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,8 +34,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         container: ViewGroup?
     ): FragmentSearchBinding = FragmentSearchBinding.inflate(inflater , container ,false)
 
+    private  val TAG = "SearchFragment"
+
     private lateinit var concatAdapter: ConcatAdapter
-    private lateinit var searchListHelper: QuickAdapterHelper
+
+    lateinit var searchHelp : QuickAdapterHelper
 
     /**搜索历史头部适配器*/
     private lateinit var heardHistoryAdapter : SearchHeardHistoryAdapter
@@ -44,7 +48,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
 
     /**置顶文章适配器*/
-    private lateinit var searchLikeAdapter: SearchLikeAdapter
+    private lateinit var likeAdapter: SearchLikeAdapter
 
     /**搜索列表适配器*/
     private lateinit var searchListAdapter: SearchListAdapter
@@ -59,32 +63,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         startObserverOnStarted {
             launch {
                 viewmodel.searchFlow.collectLatest {uiState ->
-                    //当前文本
-                    if (StringUtils.isEmpty(uiState.query)){
-                        binding.et.setText(uiState.query)
-                    }
-
-                    //搜索列表
-                    if (uiState.searchList.isNotEmpty()){
-                        searchListAdapter.submitList(uiState.searchList)
-                    }
-
-                    //loading显示
-                    showLoading(uiState.isShowLoading)
-
                     //搜索历史
                     showHistory(uiState.historyList)
 
                     //=== 热词 ===
                     heardHotAdapter.item = uiState.hotList ?: emptyList()
                     //置顶列表
-                    searchLikeAdapter.submitList(uiState.likeList ?: emptyList())
+                    likeAdapter.submitList(uiState.likeList ?: emptyList())
 
-                    //加载更多状态
-                    if (!uiState.isLoading && uiState.searchList.isNotEmpty()){
-                        searchListHelper.trailingLoadState = LoadState.NotLoading(uiState.isOver)
+                    //搜索列表
+                    showSearchList(uiState)
 
-                    }
 
 //                    uiState.error.let {
 //                        ToastUtils.showShort(it)
@@ -94,11 +83,26 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun showLoading(showLoading: Boolean) {
-        if (!showLoading){
-            binding.spinkitview.visibility = View.GONE
+    private fun showSearchList(uiState: SearchUiState) {
+        if (StringUtils.isTrimEmpty(uiState.query)){
+            binding.ivClose.visibility = View.GONE
+            binding.rvSearch.visibility = View.GONE
+            searchHelp.trailingLoadState = LoadState.None
+        }else{
+            binding.ivClose.visibility = View.VISIBLE
+            binding.rvSearch.visibility = View.VISIBLE
+            searchListAdapter.keyword = uiState.query
+            searchListAdapter.submitList(uiState.searchList ?: emptyList())
+            if (uiState.isLoading || uiState.searchList.isEmpty()){
+                searchHelp.trailingLoadState = LoadState.None
+            }else {
+                searchHelp.trailingLoadState = LoadState.NotLoading(uiState.isOver)
+            }
+
         }
+
     }
+
 
     private fun showHistory(historyList: List<HistoryEntity>?) {
         if (historyList.isNullOrEmpty()){
@@ -121,27 +125,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     override fun initListen() {
         //监听输入框文字变化
         binding.et.doOnTextChanged { text, _, _, _ ->
-            isShowView(text)
+//            searchHelp.trailingLoadState = LoadState.None
+            Log.d(TAG, "initListen: ")
+            viewmodel.setKeyWord(text.toString())
         }
 
         //关闭按钮点击
         binding.ivClose.setOnClickListener {
             binding.et.text?.clear()
-            binding.rvSearch.visibility = View.GONE
         }
 
-        //搜索按钮点击
-        binding.btnSearch.setOnClickListener {
-            if (!StringUtils.isTrimEmpty(binding.et.text.toString())){
-                binding.btnSearch.visibility = View.GONE
-                binding.rvSearch.visibility = View.VISIBLE
-                binding.spinkitview.visibility = View.VISIBLE
-                viewmodel.getSearchArticles(keyWord = binding.et.text.toString().trim())
-            }else{
-                ToastUtils.showShort("请输入搜索内容")
-            }
-
-        }
 
         //搜索历史删除点击
         heardHistoryAdapter.addOnItemChildClickListener(R.id.iv_delete){_, _, _ ->
@@ -150,44 +143,45 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     }
 
-    private fun isShowView(text: CharSequence?) {
-        if (StringUtils.isTrimEmpty(text.toString())){
-            binding.ivClose.visibility = View.GONE
-            binding.btnSearch.visibility = View.GONE
-        }else{
-            binding.btnSearch.visibility = View.VISIBLE
-            binding.ivClose.visibility = View.VISIBLE
-        }
-    }
 
     private fun setUpRecyclerView() {
         heardHistoryAdapter = SearchHeardHistoryAdapter()
         heardHotAdapter = SearchHeardHotAdapter()
-        searchLikeAdapter = SearchLikeAdapter()
+        likeAdapter = SearchLikeAdapter()
 
         binding.rvTop.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            concatAdapter = ConcatAdapter(heardHotAdapter , searchLikeAdapter)
+            concatAdapter = ConcatAdapter(heardHotAdapter , likeAdapter)
             adapter = concatAdapter
         }
 
+
+        //搜索列表适配器
+
         binding.rvSearch.apply {
-            searchListLayoutManager = LinearLayoutManager(context , LinearLayoutManager.VERTICAL , false)
-            layoutManager = searchListLayoutManager
             searchListAdapter = SearchListAdapter()
-            searchListHelper = QuickAdapterHelper.Builder(searchListAdapter)
+            searchListLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = searchListLayoutManager
+            searchHelp = QuickAdapterHelper.Builder(searchListAdapter)
                 .setTrailingLoadStateAdapter(object : TrailingLoadStateAdapter.OnTrailingListener{
                     override fun onLoad() {
                         viewmodel.loadMore()
                     }
 
                     override fun onFailRetry() {
-//                        viewmodel.loadMore()
+                        viewmodel.loadMore()
                     }
+
                 })
                 .build()
-            adapter=searchListHelper.adapter
+
+            adapter = searchHelp.adapter
+
+            searchListAdapter.setOnItemClickListener { adapter, view, positon ->
+                WebFragment.startToWebFragment(this@SearchFragment,R.id.nav_search_to_web,searchListAdapter.getItem(positon).link)
+            }
         }
+
     }
 
     override fun onResume() {

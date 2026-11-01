@@ -17,7 +17,7 @@ class SearchRepository(private val searchApi: SearchApi)  {
         }
 
     //搜索文章
-    fun getSearchArticles(page: Int, k: String) =
+    fun getSearchArticles(page: Int = 0, k: String) =
         flowOfApiSimple{
             searchApi.getSearchArticles(page, k)
         }

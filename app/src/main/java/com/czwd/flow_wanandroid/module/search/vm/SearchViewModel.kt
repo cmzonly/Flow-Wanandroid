@@ -6,7 +6,6 @@ import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.base.BaseViewModel
 import com.czwd.flow_wanandroid.db.room.entity.HistoryEntity
 import com.czwd.flow_wanandroid.db.room.ext.roomDao
-import com.czwd.flow_wanandroid.db.room.ext.roomDb
 import com.czwd.flow_wanandroid.module.home.Article
 import com.czwd.flow_wanandroid.module.search.bean.SearchUiState
 import com.czwd.flow_wanandroid.module.search.repository.SearchRepository
@@ -17,36 +16,36 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 
 class SearchViewModel(private val repository: SearchRepository) : BaseViewModel() {
-    private  val TAG = "SearchViewModel"
+    private  val TAG = "SearchFragment"
 
     private val _searchFlow = MutableStateFlow(SearchUiState())
     val searchFlow = _searchFlow.asStateFlow()
 
-//    private val queryFlow = MutableStateFlow("")
+    private val _query = MutableStateFlow("")
 
-    /**
-     * 此方法用于非手动点击搜索
-     */
-//    init {
-//        observeQuery()
-//    }
 
-//    private fun observeQuery() {
-//        launchOnMain {
-//            queryFlow
-//                .debounce(500L)
-//                .distinctUntilChanged()
-//                .filter { it.isNotBlank() }
-//                .collectLatest { keyWord ->
-//                    getSearchArticles(_searchFlow.value.currentPage , keyWord)
-//                }
-//        }
-//    }
+    fun setKeyWord(keyWord: String){
+        if (_query.value == keyWord) return
+        _query.value = keyWord
+        _searchFlow.update {
+            it.copy(
+                query = keyWord,
+                searchList = emptyList(),
+                currentPage = 0,
+                isOver = false
+            )
+        }
+    }
 
+    init {
+        getSearchArticles()
+    }
 
     //加载更多
     fun loadMore(){
@@ -108,57 +107,61 @@ class SearchViewModel(private val repository: SearchRepository) : BaseViewModel(
     /**
      * 获取搜索结果
      */
-    fun getSearchArticles(page : Int = 0 , keyWord: String){
-        _searchFlow.update {
-            it.copy(
-                query = keyWord
-            )
-        }
-       insertHistory(keyWord)
+    fun getSearchArticles(page : Int = 0){
         launchOnMain {
-            repository.getSearchArticles(page , keyWord).collectLatest {
-                when(it){
-                    NetworkResult.Loading -> {
-                        Log.d(TAG, "Loading: ")
-                    }
-                    is NetworkResult.Success<Article> -> {
-                        Log.d(TAG, "Success: ")
-                        val currentData = it.data
-                        val allData = if (page ==0){
-                            currentData.datas
-                        }else{
-                            _searchFlow.value.searchList + currentData.datas
+            _query
+                .filter { it.isNotBlank() }
+                .onEach {
+                    Log.d(TAG, "当前搜索内容: $it")
+                }
+                .debounce(500)
+                .distinctUntilChanged()
+                .flatMapLatest {
+                    repository.getSearchArticles(k = it)
+                }
+                .collectLatest {
+                    when(it){
+                        NetworkResult.Loading -> {
+                            Log.d(TAG, "Loading: ")
                         }
-                        _searchFlow.update { state ->
-                            state.copy(
+                        is NetworkResult.Success -> {
+                            Log.d(TAG, "Success: ")
+                            val currentData = it.data
+                            val allData = if (page ==0){
+                                currentData.datas
+                            }else{
+                                _searchFlow.value.searchList + currentData.datas
+                            }
+                            _searchFlow.update { state ->
+                                state.copy(
+                                    isShowLoading = false,
+                                    isLoading = false,
+                                    searchList = allData,
+                                    isOver = currentData.over,
+                                    currentPage = if (currentData.over) page else page + 1
+                                )
+                            }
+
+                        }
+                        is NetworkResult.Error -> {
+                            Log.d(TAG, "Error:${it.message} ")
+                            _searchFlow.value = _searchFlow.value.copy(
                                 isShowLoading = false,
                                 isLoading = false,
-                                searchList = allData,
-                                isOver = currentData.over,
-                                currentPage = if (currentData.over) page else page + 1
+                                error = it.message ?: FlowApplication.context.resources.getString(R.string.unknow_error)
                             )
                         }
-
-                    }
-                    is NetworkResult.Error -> {
-                        Log.d(TAG, "Error:${it.message} ")
-                        _searchFlow.value = _searchFlow.value.copy(
-                            isShowLoading = false,
-                            isLoading = false,
-                            error = it.message ?: FlowApplication.context.resources.getString(R.string.unknow_error)
-                        )
-                    }
-                    else -> {
-                        _searchFlow.update { state ->
-                            state.copy(
-                                isLoading = false,
-                                isShowLoading = false
-                            )
+                        else -> {
+                            _searchFlow.update { state ->
+                                state.copy(
+                                    isLoading = false,
+                                    isShowLoading = false
+                                )
+                            }
+                            Log.d(TAG, "else:")
                         }
-                        Log.d(TAG, "else:")
                     }
                 }
-            }
         }
 
     }
@@ -184,10 +187,6 @@ class SearchViewModel(private val repository: SearchRepository) : BaseViewModel(
         getHotWord()
         getTopArticles()
     }
-
-    /**
-     * 获取搜索内容
-     */
 
     /**
      * 删除历史记录

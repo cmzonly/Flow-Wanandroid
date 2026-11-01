@@ -82,6 +82,11 @@
         tools:layout="@layout/fragment_search"
         >
 
+        <action
+            app:destination="@id/webFragment"
+            android:id="@+id/nav_search_to_web"
+            />
+
     </fragment>
 
 

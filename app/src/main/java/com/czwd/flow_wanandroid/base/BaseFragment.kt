@@ -81,7 +81,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(){
 
     // ==================== Flow 收集工具 ====================
    protected  fun startObserverOnStarted(block : (suspend CoroutineScope.() -> Unit)?=null){
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED){
                     block?.invoke(this)
                 }

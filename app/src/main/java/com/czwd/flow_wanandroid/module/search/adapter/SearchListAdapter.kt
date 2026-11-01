@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter4.BaseQuickAdapter
 import com.czwd.flow_wanandroid.R
 import com.czwd.flow_wanandroid.databinding.ItemArticleBinding
 import com.czwd.flow_wanandroid.module.home.Article
+import com.czwd.flow_wanandroid.utils.highlight
 
 class SearchListAdapter : BaseQuickAdapter<Article.DataX, SearchListAdapter.VH>() {
     override fun onCreateViewHolder(
@@ -19,13 +21,23 @@ class SearchListAdapter : BaseQuickAdapter<Article.DataX, SearchListAdapter.VH>(
         viewType: Int
     ) = VH(parent)
 
+    /**搜索关键词，用于列表条目高亮*/
+    var keyword: String = ""
+        set(value) {
+            if (field != value) {
+                field = value
+                notifyItemRangeChanged(0, itemCount)
+            }
+        }
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(
         holder: VH,
         position: Int,
         item: Article.DataX?
     ) {
-        holder.tvTitle.text = item?.title
+        val highlightColor = ContextCompat.getColor(holder.itemView.context, R.color.red)
+        holder.tvTitle.text = item?.title.highlight(keyword, highlightColor)
         item?.author?.let {
             holder.tvAuthor.text = "作者: ${it} "
         }.run {
